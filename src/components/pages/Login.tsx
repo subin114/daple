@@ -81,9 +81,10 @@ const LoginContainer = styled.section`
   height: 100%;
   min-height: 700px;
   margin: 50px auto;
+  padding: 120px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 `;
 
 const Form = styled.form`
