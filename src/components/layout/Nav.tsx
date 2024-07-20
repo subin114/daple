@@ -1,9 +1,16 @@
 import styled from '@emotion/styled';
 import logo from '../../assets/logo.svg';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+interface MenuProps {
+  active?: boolean;
+}
 
 const Nav = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <Header>
@@ -12,17 +19,29 @@ const Nav = () => {
           <img src={logo} alt="데이플" />
         </H1>
         <Category>
-          <Menu onClick={() => navigate('/near')}>내 근처 핫플</Menu>
-          <Menu onClick={() => navigate('/region')}>지역별 핫플</Menu>
-          <Menu onClick={() => navigate('/community')}>커뮤니티</Menu>
+          <Menu onClick={() => navigate('/near')} active={isActive('/near')}>
+            내 근처 핫플
+          </Menu>
+          <Menu onClick={() => navigate('/region')} active={isActive('/region')}>
+            지역별 핫플
+          </Menu>
+          <Menu onClick={() => navigate('/community')} active={isActive('/community')}>
+            커뮤니티
+          </Menu>
         </Category>
       </NavLeft>
       <NavRight>
-        <Option onClick={() => navigate('/bookmark')}>북마크</Option>
+        <Option onClick={() => navigate('/bookmark')} active={isActive('/bookmark')}>
+          북마크
+        </Option>
         <Line />
-        <Option onClick={() => navigate('/mypage')}>마이페이지</Option>
+        <Option onClick={() => navigate('/mypage')} active={isActive('/mypage')}>
+          마이페이지
+        </Option>
         <Line />
-        <Option onClick={() => navigate('/login')}>로그인</Option>
+        <Option onClick={() => navigate('/login')} active={isActive('/login')}>
+          로그인
+        </Option>
       </NavRight>
     </Header>
   );
@@ -67,12 +86,13 @@ const Category = styled.ul`
   align-items: center;
 `;
 
-const Menu = styled.li`
+const Menu = styled.li<MenuProps>`
   margin-right: 25px;
   padding: 0 10px;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
+  color: ${({ active }) => (active ? '#56bec0' : '#000')};
 
   &:hover {
     color: #56bec0;
@@ -87,10 +107,11 @@ const NavRight = styled.ul`
   align-items: center;
 `;
 
-const Option = styled.li`
+const Option = styled.li<MenuProps>`
   font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
+  color: ${({ active }) => (active ? '#56bec0' : '#000')};
 
   &:hover {
     color: #56bec0;
