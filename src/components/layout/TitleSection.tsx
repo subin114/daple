@@ -50,7 +50,7 @@ const MoreBtn = styled(Button)`
   margin: 0;
 
   &:hover {
-    color: #56b2b4;
+    color: #42abad;
   }
 `;
 

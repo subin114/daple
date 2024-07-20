@@ -30,7 +30,7 @@ const Section = styled.footer`
   justify-content: center;
   align-items: center;
   padding: 0 80px;
-  background-color: #56b2b4;
+  background-color: #42abad;
 `;
 
 const H1 = styled.h1`
