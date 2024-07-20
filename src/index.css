@@ -25,29 +25,3 @@ li {
 a {
   text-decoration: none;
 }
-
-// scrollbar custom
-::-webkit-scrollbar {
-  width: 11px;
-  height: 11px;
-}
-
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 3px rgba(126, 126, 126, 0.8);
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: var(--color-gray);
-  border-radius: 10px;
-}
-
-// drag custom
-::-moz-selection {
-  color: var(--color-secondary);
-  background: var(--color-drag);
-}
-
-::selection {
-  color: var(--color-secondary);
-  background: var(--color-drag);
-}
