@@ -123,7 +123,6 @@ const Line = styled.span`
   display: inline-block;
   margin: 0 12px;
   border-left: 1px solid #ddd;
-  background: pink;
 `;
 
 export default Nav;

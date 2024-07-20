@@ -57,6 +57,7 @@ const StyledSwiper = styled(SwiperComponent)`
     background-color: #f0f0f0;
     border-radius: 30px;
     cursor: pointer;
+    overflow: hidden;
   }
 
   .swiper-button-next,
