@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import logo from '../../assets/logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useCurAuthStore } from '../../store/useCurAuthStore';
 
 interface MenuProps {
   active?: boolean;
@@ -9,40 +10,64 @@ interface MenuProps {
 const Nav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
   const isActive = (path: string) => location.pathname === path;
+
+  const { user, isAuthenticated, setUser, setAuthenticated, logout } = useCurAuthStore();
 
   return (
     <Header>
-      <NavLeft>
-        <H1 onClick={() => navigate('/')}>
-          <img src={logo} alt="데이플" />
-        </H1>
-        <Category>
-          <Menu onClick={() => navigate('/near')} active={isActive('/near')}>
-            내 근처 핫플
-          </Menu>
-          <Menu onClick={() => navigate('/region')} active={isActive('/region')}>
-            지역별 핫플
-          </Menu>
-          <Menu onClick={() => navigate('/community')} active={isActive('/community')}>
-            커뮤니티
-          </Menu>
-        </Category>
-      </NavLeft>
-      <NavRight>
-        <Option onClick={() => navigate('/bookmark')} active={isActive('/bookmark')}>
-          북마크
-        </Option>
-        <Line />
-        <Option onClick={() => navigate('/mypage')} active={isActive('/mypage')}>
-          마이페이지
-        </Option>
-        <Line />
-        <Option onClick={() => navigate('/login')} active={isActive('/login')}>
-          로그인
-        </Option>
-      </NavRight>
+      <Container>
+        <NavLeft>
+          <H1 onClick={() => navigate('/')}>
+            <img src={logo} alt="데이플" />
+          </H1>
+          <Category>
+            <Menu onClick={() => navigate('/near')} active={isActive('/near')}>
+              내 근처 핫플
+            </Menu>
+            <Menu onClick={() => navigate('/region')} active={isActive('/region')}>
+              지역별 핫플
+            </Menu>
+            <Menu onClick={() => navigate('/community')} active={isActive('/community')}>
+              커뮤니티
+            </Menu>
+          </Category>
+        </NavLeft>
+        <NavRight>
+          <Option onClick={() => navigate('/bookmark')} active={isActive('/bookmark')}>
+            북마크
+          </Option>
+          <Line />
+          <Option onClick={() => navigate('/mypage')} active={isActive('/mypage')}>
+            마이페이지
+          </Option>
+          <Line />
+          {isAuthenticated ? (
+            <>
+              <Option
+                onClick={() => {
+                  logout();
+                  navigate('/');
+                }}
+              >
+                로그아웃
+              </Option>
+            </>
+          ) : (
+            <>
+              <Option onClick={() => navigate('/login')} active={isActive('/login')}>
+                로그인
+              </Option>
+            </>
+          )}
+        </NavRight>
+        {isAuthenticated ? (
+          <UserInfo>
+            <img src="https://source.boringavatars.com/beam/40" />
+            <UserName>닉네임</UserName>
+          </UserInfo>
+        ) : null}
+      </Container>
     </Header>
   );
 };
@@ -51,7 +76,7 @@ const Header = styled.header`
   width: 100%;
   height: 70px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 0 80px;
   position: fixed;
@@ -59,6 +84,14 @@ const Header = styled.header`
   z-index: 999;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+`;
+
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const NavLeft = styled.div`
@@ -105,6 +138,31 @@ const NavRight = styled.ul`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-left: auto;
+`;
+
+const UserInfo = styled.div`
+  min-width: 60px;
+  width: auto;
+  height: 30px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: 40px;
+
+  img {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    margin-right: 7px;
+    border-radius: 20px;
+  }
+`;
+
+const UserName = styled.span`
+  width: auto;
+  display: inline-block;
+  font-size: 14px;
 `;
 
 const Option = styled.li<MenuProps>`
