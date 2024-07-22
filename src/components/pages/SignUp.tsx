@@ -3,12 +3,87 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { useUserStore } from '@/store/useUserStore';
+import { signUp } from '../../firebase/firebaseAuth';
+import { FirebaseCustomError } from '@/types/FirebaseCustomError';
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const {
+    email,
+    password,
+    nickname,
+    setEmail,
+    setPassword,
+    setNickname,
+    emailValid,
+    passwordValid,
+    nicknameValid,
+    setEmailValid,
+    setPasswordValid,
+    setNicknameValid,
+    emailError,
+    passwordError,
+    nicknameError,
+    setEmailError,
+    setPasswordError,
+    setNicknameError,
+    validateEmail,
+    validatePassword,
+    validateNickname,
+  } = useUserStore();
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === 'email') {
+      setEmail(value);
+    } else if (name === 'password') {
+      setPassword(value);
+    } else if (name === 'nickname') {
+      setNickname(value);
+    }
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const emailIsValid = validateEmail();
+    const passwordIsValid = validatePassword();
+    const nicknameIsValid = validateNickname();
+
+    if (!emailIsValid || !passwordIsValid || !nicknameIsValid) {
+      return;
+    }
+
+    try {
+      await signUp(email, password);
+      console.log('Account created successfully');
+      alert('회원가입이 완료되었습니다.');
+      navigate('/login');
+    } catch (err) {
+      console.error('Error creating account: ', err);
+
+      const firebaseError = (err as FirebaseCustomError).code;
+
+      switch (firebaseError) {
+        case 'auth/email-already-in-use':
+          setEmailValid(false);
+          setEmailError('이미 사용 중인 이메일입니다.');
+          break;
+        case 'auth/weak-password':
+          setPasswordValid(false);
+          setPasswordError('비밀번호는 6~12자리 이어야 합니다.');
+          break;
+        case 'auth/invalid-email':
+          setEmailValid(false);
+          setEmailError('잘못된 이메일 형식입니다.');
+          break;
+        default:
+          setEmailValid(false);
+          setEmailError('오류가 발생했습니다. 다시 시도해 주세요.');
+          break;
+      }
+    }
   };
 
   return (
@@ -17,18 +92,39 @@ const SignUp = () => {
         <Text>Sign Up</Text>
         <InputWrap>
           <Label htmlFor="email">Email</Label>
-          <Input type="email" id="email" placeholder="Email" />
-          <Warning>경고 메시지</Warning>
+          <Input
+            type="email"
+            id="email"
+            placeholder="email"
+            name="email"
+            value={email}
+            onChange={onChange}
+          />
+          <Warning visible={!!emailError}>{emailError}</Warning>
         </InputWrap>
         <InputWrap>
           <Label htmlFor="password">Password</Label>
-          <Input type="password" id="password" placeholder="password" />
-          <Warning>경고 메시지</Warning>
+          <Input
+            type="password"
+            id="password"
+            placeholder="password"
+            name="password"
+            value={password}
+            onChange={onChange}
+          />
+          <Warning visible={!!passwordError}>{passwordError}</Warning>
         </InputWrap>
         <InputWrap>
           <Label htmlFor="nickname">Nickname</Label>
-          <Input type="text" id="nickname" placeholder="nickname" />
-          <Warning>경고 메시지</Warning>
+          <Input
+            type="text"
+            id="nickname"
+            placeholder="nickname"
+            name="nickname"
+            value={nickname}
+            onChange={onChange}
+          />
+          <Warning visible={!!nicknameError}>{nicknameError}</Warning>
         </InputWrap>
 
         <Btn type="submit">회원가입</Btn>
@@ -76,11 +172,13 @@ const InputWrap = styled.div`
   }
 `;
 
-const Warning = styled.span`
+const Warning = styled.span<{ visible: boolean }>`
+  display: inline-block;
+  height: 15px;
+  weight: 100%;
+  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
   font-size: 12px;
   color: #ff574b;
-  visibility: hidden;
-  background-color: #ccc;
 `;
 
 const Btn = styled(Button)`
