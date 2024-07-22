@@ -56,7 +56,7 @@ const SignUp = () => {
     }
 
     try {
-      await signUp(email, password);
+      await signUp(email, password, nickname);
       console.log('Account created successfully');
       alert('회원가입이 완료되었습니다.');
       navigate('/login');
