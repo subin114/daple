@@ -3,12 +3,86 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { useUserStore } from '@/store/useUserStore';
+import { signIn } from '../../firebase/firebaseAuth';
+import { FirebaseCustomError } from '@/types/FirebaseCustomError';
 
 const Login = () => {
   const navigate = useNavigate();
+  const {
+    email,
+    password,
+    nickname,
+    setEmail,
+    setPassword,
+    setNickname,
+    setEmailValid,
+    setPasswordValid,
+    emailError,
+    passwordError,
+    nicknameError,
+    setEmailError,
+    setPasswordError,
+    validateEmail,
+    validatePassword,
+    validateNickname,
+  } = useUserStore();
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (name === 'email') {
+      setEmail(value);
+    } else if (name === 'password') {
+      setPassword(value);
+    }
+  };
+
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const emailIsValid = validateEmail();
+    const passwordIsValid = validatePassword();
+
+    if (!emailIsValid || !passwordIsValid) {
+      return;
+    }
+
+    try {
+      await signIn(email, password);
+      console.log('Account login successfully');
+      alert('로그인에 성공하였습니다.');
+      navigate('/');
+    } catch (err) {
+      console.error('Account logging error: ', err);
+
+      const firebaseError = (err as FirebaseCustomError).code;
+
+      switch (firebaseError) {
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+        case 'auth/invalid-credential':
+          setEmailValid(false);
+          setPasswordValid(false);
+          setEmailError('이메일 혹은 비밀번호가 일치하지 않습니다.');
+          break;
+        case 'auth/email-already-in-use':
+          setEmailValid(false);
+          setEmailError('이미 사용 중인 이메일입니다.');
+          break;
+        case 'auth/weak-password':
+          setPasswordValid(false);
+          setPasswordError('비밀번호는 6~12자리 이어야 합니다.');
+          break;
+        case 'auth/invalid-email':
+          setEmailValid(false);
+          setEmailError('잘못된 이메일 형식입니다.');
+          break;
+        default:
+          setEmailValid(false);
+          setEmailError('오류가 발생했습니다. 다시 시도해 주세요.');
+          break;
+      }
+    }
   };
 
   return (
@@ -17,13 +91,27 @@ const Login = () => {
         <Text>Login</Text>
         <InputWrap>
           <Label htmlFor="email">Email</Label>
-          <Input type="email" id="email" placeholder="Email" />
-          <Warning>경고 메시지</Warning>
+          <Input
+            type="email"
+            id="email"
+            placeholder="Email"
+            name="email"
+            value={email}
+            onChange={onChange}
+          />
+          <Warning visible={!!emailError}>{emailError}</Warning>
         </InputWrap>
         <InputWrap>
           <Label htmlFor="password">Password</Label>
-          <Input type="password" id="password" placeholder="password" />
-          <Warning>경고 메시지</Warning>
+          <Input
+            type="password"
+            id="password"
+            placeholder="password"
+            name="password"
+            value={password}
+            onChange={onChange}
+          />
+          <Warning visible={!!passwordError}>{passwordError}</Warning>
         </InputWrap>
         <div>
           <Btn type="submit">로그인</Btn>
@@ -114,11 +202,13 @@ const InputWrap = styled.div`
   }
 `;
 
-const Warning = styled.span`
+const Warning = styled.span<{ visible: boolean }>`
+  display: inline-block;
+  height: 15px;
+  weight: 100%;
+  visibility: ${({ visible }) => (visible ? 'visible' : 'hidden')};
   font-size: 12px;
   color: #ff574b;
-  visibility: hidden;
-  background-color: #ccc;
 `;
 
 const Btn = styled(Button)`
