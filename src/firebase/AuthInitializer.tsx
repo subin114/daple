@@ -10,8 +10,9 @@ const AuthInitializer = () => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(authService, async user => {
-      setUser(user);
       if (user) {
+        // 사용자 상태가 변경되었을 때만 상태 업데이트
+        setUser(user);
         try {
           const userInfo = await getUserInfo(user.uid);
           console.log('User info fetched:', userInfo); // 디버깅용

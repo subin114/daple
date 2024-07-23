@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '../../store/useUserStore';
+import { useSignUpStore } from '../../store/useUserStore';
 import { signUp } from '../../firebase/firebaseAuth';
 import { FirebaseCustomError } from '@/types/FirebaseCustomError';
 
@@ -18,6 +18,7 @@ const SignUp = () => {
     setNickname,
     setEmailValid,
     setPasswordValid,
+    setNicknameValid,
     emailError,
     passwordError,
     nicknameError,
@@ -26,16 +27,19 @@ const SignUp = () => {
     validateEmail,
     validatePassword,
     validateNickname,
-  } = useUserStore();
+  } = useSignUpStore();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === 'email') {
       setEmail(value);
+      setEmailValid(true);
     } else if (name === 'password') {
       setPassword(value);
+      setPasswordValid(true);
     } else if (name === 'nickname') {
       setNickname(value);
+      setNicknameValid(true);
     }
   };
 
@@ -51,12 +55,6 @@ const SignUp = () => {
     }
 
     try {
-      // const isSignUpSuccess = await signUp(email, password, nickname);
-      // if (isSignUpSuccess) {
-      //   console.log('Account created successfully');
-      //   alert('회원가입이 완료되었습니다.');
-      //   navigate('/login');
-      // }
       await signUp(email, password, nickname);
       console.log('Account created successfully');
       alert('회원가입이 완료되었습니다.');

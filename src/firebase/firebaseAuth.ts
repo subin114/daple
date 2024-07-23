@@ -10,9 +10,7 @@ export const signUp = async (email: string, password: string, nickname: string) 
     const user = userCredential.user;
 
     await saveUserToFirestore(user.uid, email, nickname);
-    await authService.signOut();
-
-    return { email, nickname };
+    await authService.signOut(); // 회원가입 시 자동으로 로그인 되기 때문에 임시로 작성함
   } catch (err) {
     console.error('Error signing up: ', err);
     throw err;

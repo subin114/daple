@@ -1,7 +1,20 @@
 import { UserInfo } from '../store/useCurAuthStore';
 import { db } from './firebaseConfig';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, addDoc, collection } from 'firebase/firestore';
 
+// export const saveUserToFirestore = async (email: string, nickname: string) => {
+//   try {
+//     const docRef = await addDoc(collection(db, 'users'), {
+//       email,
+//       nickname,
+//     });
+
+//     console.log('Document written with ID: ', docRef.id);
+//   } catch (err) {
+//     console.error('Error saving user to Firestore: ', err);
+//     throw err;
+//   }
+// };
 export const saveUserToFirestore = async (uid: string, email: string, nickname: string) => {
   try {
     await setDoc(doc(db, 'users', uid), {
