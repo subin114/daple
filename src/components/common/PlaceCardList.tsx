@@ -1,7 +1,12 @@
+import { Place } from '@/store/usePlaceStore';
 import PlaceCard from './PlaceCard';
 import { Grid, useBreakpointValue } from '@chakra-ui/react';
 
-const PlaceCardList = () => {
+interface PlaceCardListProps {
+  places: Place[];
+}
+
+const PlaceCardList = ({ places }: PlaceCardListProps) => {
   const cards = [
     {
       id: 1,
@@ -65,13 +70,13 @@ const PlaceCardList = () => {
 
   return (
     <Grid templateColumns={`repeat(${columns}, 1fr)`} gap={7}>
-      {cards.map(card => (
+      {places.map(place => (
         <PlaceCard
-          key={card.id}
-          imageUrl={card.imageUrl}
-          category={card.category}
-          title={card.title}
-          address={card.address}
+          key={place.id}
+          imageUrl={place.imageUrl}
+          category={place.category_group_name}
+          title={place.place_name}
+          address={place.address_name}
         />
       ))}
     </Grid>

@@ -1,10 +1,15 @@
 import styled from '@emotion/styled';
 import { Tabs as TabsContainer, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import PlaceCardList from '../common/PlaceCardList';
+import { Place } from '@/store/usePlaceStore';
 
 interface TabData {
   value: string;
   label: string;
+}
+
+interface TabsProps {
+  places: Place[];
 }
 
 const tabs: TabData[] = [
@@ -17,7 +22,7 @@ const tabs: TabData[] = [
   { value: 'etc', label: '기타' },
 ];
 
-const Tabs = () => {
+const Tabs = ({ places }: TabsProps) => {
   return (
     <TabsContainer defaultValue="all">
       <StyledTabsList>
@@ -30,7 +35,11 @@ const Tabs = () => {
 
       {tabs.map(tab => (
         <TabsContent value={tab.value} key={tab.value}>
-          <PlaceCardList />
+          <PlaceCardList
+            places={places.filter(
+              place => place.category_group_name === tab.value || tab.value === 'all',
+            )}
+          />
         </TabsContent>
       ))}
     </TabsContainer>
