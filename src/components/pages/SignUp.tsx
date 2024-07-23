@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '@/store/useUserStore';
+import { useUserStore } from '../../store/useUserStore';
 import { signUp } from '../../firebase/firebaseAuth';
 import { FirebaseCustomError } from '@/types/FirebaseCustomError';
 
@@ -51,6 +51,12 @@ const SignUp = () => {
     }
 
     try {
+      // const isSignUpSuccess = await signUp(email, password, nickname);
+      // if (isSignUpSuccess) {
+      //   console.log('Account created successfully');
+      //   alert('회원가입이 완료되었습니다.');
+      //   navigate('/login');
+      // }
       await signUp(email, password, nickname);
       console.log('Account created successfully');
       alert('회원가입이 완료되었습니다.');
@@ -78,6 +84,9 @@ const SignUp = () => {
           setEmailError('오류가 발생했습니다. 다시 시도해 주세요.');
           break;
       }
+    } finally {
+      setEmail('');
+      setPassword('');
     }
   };
 

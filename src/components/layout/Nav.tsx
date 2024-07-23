@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import logo from '../../assets/logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCurAuthStore } from '../../store/useCurAuthStore';
+import { memo } from 'react';
 
 interface MenuProps {
   active?: boolean;
@@ -12,7 +13,9 @@ const Nav = () => {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
 
-  const { user, isAuthenticated, setUser, setAuthenticated, logout } = useCurAuthStore();
+  const { isAuthenticated, userInfo, logout } = useCurAuthStore();
+
+  console.log('UserInfo in Nav:', userInfo); // 디버깅용
 
   return (
     <Header>
@@ -64,7 +67,7 @@ const Nav = () => {
         {isAuthenticated ? (
           <UserInfo>
             <img src="https://source.boringavatars.com/beam/40" />
-            <UserName>닉네임</UserName>
+            <UserName>{userInfo?.nickname}</UserName>
           </UserInfo>
         ) : null}
       </Container>
@@ -160,7 +163,9 @@ const UserInfo = styled.div`
 `;
 
 const UserName = styled.span`
+  min-width: 30px;
   width: auto;
+  height: 20px;
   display: inline-block;
   font-size: 14px;
 `;
@@ -183,4 +188,4 @@ const Line = styled.span`
   border-left: 1px solid #ddd;
 `;
 
-export default Nav;
+export default memo(Nav);

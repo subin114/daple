@@ -3,30 +3,29 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
-import { useUserStore } from '@/store/useUserStore';
+import { useUserStore } from '../../store/useUserStore';
 import { signIn } from '../../firebase/firebaseAuth';
 import { FirebaseCustomError } from '@/types/FirebaseCustomError';
+import { useCurAuthStore } from '../../store/useCurAuthStore';
 
 const Login = () => {
   const navigate = useNavigate();
   const {
     email,
     password,
-    nickname,
     setEmail,
     setPassword,
-    setNickname,
     setEmailValid,
     setPasswordValid,
     emailError,
     passwordError,
-    nicknameError,
     setEmailError,
     setPasswordError,
     validateEmail,
     validatePassword,
-    validateNickname,
   } = useUserStore();
+
+  const { setUserInfo, setUser } = useCurAuthStore();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,10 +47,19 @@ const Login = () => {
     }
 
     try {
-      await signIn(email, password);
-      console.log('Account login successfully');
-      alert('로그인에 성공하였습니다.');
-      navigate('/');
+      const { user, userInfo } = await signIn(email, password);
+      if (user && userInfo) {
+        setUser(user);
+        setUserInfo(userInfo);
+        localStorage.setItem('user', JSON.stringify(userInfo)); // 로그인 상태 저장
+        console.log('Account login successfully');
+        alert('로그인에 성공하였습니다.');
+        navigate('/');
+      }
+      // await signIn(email, password);
+      // console.log('Account login successfully');
+      // alert('로그인에 성공하였습니다.');
+      // navigate('/');
     } catch (err) {
       console.error('Account logging error: ', err);
 
@@ -82,6 +90,9 @@ const Login = () => {
           setEmailError('오류가 발생했습니다. 다시 시도해 주세요.');
           break;
       }
+    } finally {
+      setEmail('');
+      setPassword('');
     }
   };
 
