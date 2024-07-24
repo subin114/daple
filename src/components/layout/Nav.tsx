@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import logo from '../../assets/logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCurAuthStore } from '../../store/useCurAuthStore';
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface MenuProps {
   active?: boolean;
@@ -13,9 +14,49 @@ const Nav = () => {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
 
-  const { isAuthenticated, userInfo, logout } = useCurAuthStore();
+  const { isAuthenticated, userInfo, isLoading, setLoading, logout } = useCurAuthStore();
 
   console.log('UserInfo in Nav:', userInfo); // 디버깅용
+
+  useEffect(() => {
+    setLoading(true);
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [setLoading]);
+
+  if (isLoading) {
+    return (
+      <Header>
+        <Container>
+          <NavLeft>
+            <H1>
+              <Skeleton className="h-[35px] w-[250px]" />
+            </H1>
+            <Category>
+              <Skeleton className="h-4 w-[90px] mr-2" />
+              <Skeleton className="h-4 w-[90px] mr-2" />
+              <Skeleton className="h-4 w-[90px]" />
+            </Category>
+          </NavLeft>
+          <NavRight>
+            <Skeleton className="h-4 w-[60px] mr-2" />
+            <Skeleton className="h-4 w-[90px] mr-2" />
+            <Skeleton className="h-4 w-[60px]" />
+          </NavRight>
+          {isAuthenticated ? (
+            <UserInfo>
+              <Skeleton className="h-[24px] w-[24px] rounded-full mr-2" />
+              <Skeleton className="h-4 w-[50px]" />
+            </UserInfo>
+          ) : null}
+        </Container>
+      </Header>
+    );
+  }
 
   return (
     <Header>
@@ -46,22 +87,11 @@ const Nav = () => {
           </Option>
           <Line />
           {isAuthenticated ? (
-            <>
-              <Option
-                onClick={() => {
-                  logout();
-                  navigate('/login');
-                }}
-              >
-                로그아웃
-              </Option>
-            </>
+            <Option onClick={logout}>로그아웃</Option>
           ) : (
-            <>
-              <Option onClick={() => navigate('/login')} active={isActive('/login')}>
-                로그인
-              </Option>
-            </>
+            <Option onClick={() => navigate('/login')} active={isActive('/login')}>
+              로그인
+            </Option>
           )}
         </NavRight>
         {isAuthenticated ? (
@@ -178,6 +208,14 @@ const Menu = styled.li<MenuProps>`
   &:hover {
     color: #56bec0;
   }
+`;
+
+const SkeletonMenu = styled(Skeleton)`
+  margin-right: 25px;
+  padding: 0 10px;
+  font-size: 14px;
+  height: 100%;
+  width: 100%;
 `;
 
 const NavRight = styled.ul`
