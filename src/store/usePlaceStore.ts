@@ -1,42 +1,95 @@
-import { fetchPlacesByKeyword } from '@/api/kakaoApi';
 import { create } from 'zustand';
 
 export interface Place {
+  adrFormatAddress: string;
+  currentOpeningHours?: {
+    openNow: boolean;
+    periods?: {
+      open: {
+        date: {
+          day: number;
+          month: number;
+          year: number;
+        };
+        day: number;
+        hour: number;
+        minute: number;
+      };
+      close: {
+        date: {
+          day: number;
+          month: number;
+          year: number;
+        };
+        day: number;
+        hour: number;
+        minute: number;
+      };
+    }[];
+    weekdayDescriptions?: string[];
+  };
+  displayName: {
+    text: string;
+    languageCode: string;
+  };
+  formattedAddress: string;
+  googleMapsUri: string;
+  iconBackgroundColor: string;
+  iconMaskBaseUri: string;
   id: string;
-  imageUrl: string;
-  category_group_name: string;
-  place_name: string;
-  address_name: string;
+  internationalPhoneNumber: number;
+  name: string;
+  nationalPhoneNumber: string;
+  photo: string;
+  photos?: {
+    authorAttributions: {
+      display: string;
+      photoUri: string;
+      uri: string;
+    };
+    heightPx: number;
+    name: string;
+    widthPx: number;
+  }[];
+  primaryType: string;
+  primaryTypeDisplayName: {
+    languageCode: string;
+    text: string;
+  };
+  rating: number;
+  reviews?: {
+    authorAttribution: {
+      displayName: string;
+      photoUri: string;
+      uri: string;
+    };
+    name: string;
+    originalText: {
+      languageCode: string;
+      text: string;
+    };
+    publishTime: string;
+    rating: number;
+    relativePublishTimeDescription: string;
+    text: {
+      languageCode: string;
+      text: string;
+    };
+  }[];
+  types?: string[];
+  websiteUri?: string;
 }
 
-interface PlaceState {
+interface PlaceStore {
   places: Place[];
-  fetchPlaces: (latitude: string, longitude: string) => void;
+  setPlaces: (places: Place[]) => void;
+  loading: boolean;
+  error: string | null;
 }
 
-const usePlaceStore = create<PlaceState>(set => ({
+export const usePlaceStore = create<PlaceStore>(set => ({
   places: [],
-  fetchPlaces: async (latitude, longitude) => {
-    const keywords = ['음식점', '카페', '쇼핑', '전시', '이색데이트', '기타'];
-
-    try {
-      // 여러 API 호출을 동시에 실행
-      const results = await Promise.all(
-        keywords.map(keyword =>
-          fetchPlacesByKeyword(parseFloat(latitude), parseFloat(longitude), keyword),
-        ),
-      );
-
-      const response = results.flat();
-
-      // 중복된 ID를 제거
-      const uniquePlaces = Array.from(new Map(response.map(place => [place.id, place])).values());
-
-      set({ places: uniquePlaces });
-    } catch (error) {
-      console.error('Failed to fetch places: ', error);
-    }
-  },
+  setPlaces: (places: Place[]) => set({ places }),
+  loading: false,
+  error: null,
 }));
-
-export default usePlaceStore;

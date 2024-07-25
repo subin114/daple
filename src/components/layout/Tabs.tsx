@@ -36,9 +36,8 @@ const Tabs = ({ places }: TabsProps) => {
       {tabs.map(tab => (
         <TabsContent value={tab.value} key={tab.value}>
           <PlaceCardList
-            places={places.filter(
-              place => place.category_group_name === tab.value || tab.value === 'all',
-            )}
+            // places={places.filter(place => place.types?.includes(tab.value) || tab.value === 'all')}
+            places={places}
           />
         </TabsContent>
       ))}

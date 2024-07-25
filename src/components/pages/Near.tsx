@@ -1,38 +1,48 @@
 import styled from '@emotion/styled';
 import TitleDropdownSection from './../layout/TitleDropdownSection';
 import Tabs from '../layout/Tabs';
-import usePlaceStore from '@/store/usePlaceStore';
-import { useEffect } from 'react';
+import { usePlaceStore } from '@/store/usePlaceStore';
+import { useEffect, useState } from 'react';
+import { fetchPlacesInfo } from '@/api/googlePlaceApi';
 
 const Near = () => {
-  const { fetchPlaces, places } = usePlaceStore();
+  const { places, loading, error, setPlaces } = usePlaceStore();
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  /** Geolocation API - 현재 사용자의 위치 가져오기 */
   useEffect(() => {
-    const fetchCurrentLocation = async () => {
-      try {
-        const coords = await getCurrentLocation();
-        console.log('Fetching places for coords!@!@!@!@!@:', coords);
-        fetchPlaces(coords.latitude.toString(), coords.longitude.toString());
-      } catch (error) {
-        console.error('Failed to get current location or fetch places: ', error);
+    navigator.geolocation.getCurrentPosition(position => {
+      setLat(position.coords.latitude);
+      setLng(position.coords.longitude);
+    });
+  }, []);
+
+  /** fetching nearby places */
+  useEffect(() => {
+    const fetchNearbyPlaces = async () => {
+      if (lat !== null && lng !== null) {
+        const types = ['restaurant', 'cafe', 'museum', 'art_gallery'];
+        try {
+          // const data = await fetchPlacesInfo(lat, lng, types);
+          const data = await fetchPlacesInfo(lat, lng, types);
+          setPlaces(data);
+        } catch (error) {
+          console.error('Error fetching nearby places:', error);
+        }
       }
     };
 
-    fetchCurrentLocation();
-  }, []);
-
-  /** Geolocation API - 현재 사용자의 위치를 비동기적으로 가져옴 */
-  const getCurrentLocation = (): Promise<GeolocationCoordinates> => {
-    return new Promise<GeolocationCoordinates>((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
-        position => resolve(position.coords),
-        error => reject(error),
-        { enableHighAccuracy: true },
-      );
-    });
-  };
-
-  console.log('우와앙', places);
+    fetchNearbyPlaces();
+  }, [lat, lng]);
 
   return (
     <NearContainer>

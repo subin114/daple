@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useCurAuthStore } from '../store/useCurAuthStore';
 import { onAuthStateChanged } from 'firebase/auth';
 import { authService } from '../firebase/firebaseConfig';
@@ -13,6 +13,7 @@ const AuthInitializer = () => {
       if (user) {
         // 사용자 상태가 변경되었을 때만 상태 업데이트
         setUser(user);
+        console.log('user', user);
         try {
           const userInfo = await getUserInfo(user.uid);
           console.log('User info fetched:', userInfo); // 디버깅용
@@ -34,4 +35,4 @@ const AuthInitializer = () => {
   return null;
 };
 
-export default AuthInitializer;
+export default memo(AuthInitializer);

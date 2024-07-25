@@ -6,79 +6,42 @@ interface PlaceCardListProps {
   places: Place[];
 }
 
-const PlaceCardList = ({ places }: PlaceCardListProps) => {
-  const cards = [
-    {
-      id: 1,
-      imageUrl: 'https://picsum.photos/300/180',
-      category: '전체',
-      title: '장소 이름을 입력하세요',
-      address: '주소를 입력하세요',
-    },
-    {
-      id: 2,
-      imageUrl: 'https://picsum.photos/300/180',
-      category: '전체',
-      title: '장소 이름을 입력하세요',
-      address: '주소를 입력하세요',
-    },
-    {
-      id: 3,
-      imageUrl: 'https://picsum.photos/300/180',
-      category: '전체',
-      title: '장소 이름을 입력하세요',
-      address: '주소를 입력하세요',
-    },
-    {
-      id: 4,
-      imageUrl: 'https://picsum.photos/300/180',
-      category: '전체',
-      title: '장소 이름을 입력하세요',
-      address: '주소를 입력하세요',
-    },
-    {
-      id: 5,
-      imageUrl: 'https://picsum.photos/300/180',
-      category: '전체',
-      title: '장소 이름을 입력하세요',
-      address: '주소를 입력하세요',
-    },
-    {
-      id: 6,
-      imageUrl: 'https://picsum.photos/300/180',
-      category: '전체',
-      title: '장소 이름을 입력하세요',
-      address: '주소를 입력하세요',
-    },
-    {
-      id: 7,
-      imageUrl: 'https://picsum.photos/300/180',
-      category: '전체',
-      title: '장소 이름을 입력하세요',
-      address: '주소를 입력하세요',
-    },
-    {
-      id: 8,
-      imageUrl: 'https://picsum.photos/300/180',
-      category: '전체',
-      title: '장소 이름을 입력하세요',
-      address: '주소를 입력하세요',
-    },
-  ];
+// 타입 매핑
+const typeTranslations: { [key: string]: string } = {
+  restaurant: '음식점',
+  food: '음식점',
+  cafe: '카페',
+  museum: '박물관',
+  art_gallery: '전시',
+};
 
+const translateType = (type: string): string => {
+  return typeTranslations[type] || type;
+};
+
+const PlaceCardList = ({ places }: PlaceCardListProps) => {
   const columns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4 });
 
   return (
     <Grid templateColumns={`repeat(${columns}, 1fr)`} gap={7}>
-      {places.map(place => (
-        <PlaceCard
-          key={place.id}
-          imageUrl={place.imageUrl}
-          category={place.category_group_name}
-          title={place.place_name}
-          address={place.address_name}
-        />
-      ))}
+      {places.map(place => {
+        if (!place) {
+          return null;
+        }
+
+        const translatedType = place.types?.[1] ? translateType(place.types[1]) : 'Unknown';
+
+        return (
+          <PlaceCard
+            key={place.id}
+            imageUrl={place.photo ?? 'default-image-url'}
+            // category={place.types?.[1] ?? 'Unknown'}
+            category={translatedType}
+            title={place.displayName?.text ?? 'no title'}
+            address={place.formattedAddress ?? 'no vicinity'}
+          />
+        );
+      })}
     </Grid>
   );
 };
