@@ -1,22 +1,14 @@
 import { Place } from '@/store/usePlaceStore';
 import PlaceCard from './PlaceCard';
 import { Grid, useBreakpointValue } from '@chakra-ui/react';
+import { placeTypeMappings } from '@/utils/placeTypeMappings';
 
 interface PlaceCardListProps {
   places: Place[];
 }
 
-// 타입 매핑
-const typeTranslations: { [key: string]: string } = {
-  restaurant: '음식점',
-  food: '음식점',
-  cafe: '카페',
-  museum: '박물관',
-  art_gallery: '전시',
-};
-
 const translateType = (type: string): string => {
-  return typeTranslations[type] || type;
+  return placeTypeMappings[type] || type;
 };
 
 const PlaceCardList = ({ places }: PlaceCardListProps) => {
@@ -35,7 +27,6 @@ const PlaceCardList = ({ places }: PlaceCardListProps) => {
           <PlaceCard
             key={place.id}
             imageUrl={place.photo ?? 'default-image-url'}
-            // category={place.types?.[1] ?? 'Unknown'}
             category={translatedType}
             title={place.displayName?.text ?? 'no title'}
             address={place.formattedAddress ?? 'no vicinity'}

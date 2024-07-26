@@ -14,10 +14,11 @@ interface TabsProps {
 
 const tabs: TabData[] = [
   { value: 'all', label: '전체' },
-  { value: 'restaurant', label: '음식점' },
   { value: 'cafe', label: '카페' },
+  { value: 'restaurant', label: '음식점' },
   { value: 'shopping', label: '쇼핑' },
   { value: 'exhibition', label: '공연/전시' },
+  { value: 'park', label: '공원' },
   { value: 'unique', label: '이색데이트' },
   { value: 'etc', label: '기타' },
 ];
