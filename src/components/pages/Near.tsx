@@ -61,6 +61,8 @@ const Near = () => {
 const NearContainer = styled.div`
   max-width: 1200px;
   width: auto;
+  min-height: calc(100vh - 330px);
+  height: auto;
   margin: 50px auto;
 `;
 

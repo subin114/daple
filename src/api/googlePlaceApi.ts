@@ -30,7 +30,7 @@ export const fetchNearByPlaces = async (lat: number, lng: number, types: string[
           latitude: lat,
           longitude: lng,
         },
-        radius: 500,
+        radius: 2000,
       },
     },
   };

@@ -21,12 +21,12 @@ const PlaceCardList = ({ places }: PlaceCardListProps) => {
           return null;
         }
 
-        const translatedType = place.types?.[1] ? translateType(place.types[1]) : 'Unknown';
+        const translatedType = place.primaryType ? translateType(place.primaryType) : 'Unknown';
 
         return (
           <PlaceCard
             key={place.id}
-            imageUrl={place.photo ?? 'default-image-url'}
+            imageUrl={place.photo ?? '../../../public/no_image.png'}
             category={translatedType}
             title={place.displayName?.text ?? 'no title'}
             address={place.formattedAddress ?? 'no vicinity'}

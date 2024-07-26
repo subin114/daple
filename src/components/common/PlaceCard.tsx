@@ -42,6 +42,7 @@ const ImageBox = styled.div`
   overflow: hidden;
   border-radius: 15px;
   background-color: #f1f5f9;
+  border: 1px solid #f1f5f9;
 `;
 
 const Category = styled.div`
