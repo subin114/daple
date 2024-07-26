@@ -3,12 +3,13 @@ import TitleDropdownSection from './../layout/TitleDropdownSection';
 import Tabs from '../layout/Tabs';
 import { usePlaceStore } from '@/store/usePlaceStore';
 import { useEffect, useState } from 'react';
-import { fetchPlacesInfo } from '@/api/googlePlaceApi';
+import { fetchPlacesInfo, fetchFormattedAddress } from '@/api/googlePlaceApi';
 
 const Near = () => {
   const { places, loading, error, setPlaces } = usePlaceStore();
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
+  const [address, setAddress] = useState('');
 
   if (loading) {
     return <div>Loading...</div>;
@@ -18,21 +19,24 @@ const Near = () => {
     return <div>{error}</div>;
   }
 
-  /** Geolocation API - 현재 사용자의 위치 가져오기 */
+  /** 현재 위치 주소 가져오기 */
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(position => {
-      setLat(position.coords.latitude);
-      setLng(position.coords.longitude);
+    navigator.geolocation.getCurrentPosition(async position => {
+      const { latitude, longitude } = position.coords;
+      setLat(latitude);
+      setLng(longitude);
+
+      const formattedAddress = await fetchFormattedAddress(latitude, longitude);
+      setAddress(formattedAddress || '현재 위치');
     });
   }, []);
 
-  /** fetching nearby places */
+  /** 주변 장소 정보 가져오기 */
   useEffect(() => {
     const fetchNearbyPlaces = async () => {
       if (lat !== null && lng !== null) {
         const types = ['restaurant', 'cafe', 'museum', 'art_gallery'];
         try {
-          // const data = await fetchPlacesInfo(lat, lng, types);
           const data = await fetchPlacesInfo(lat, lng, types);
           setPlaces(data);
         } catch (error) {
@@ -47,7 +51,7 @@ const Near = () => {
   return (
     <NearContainer>
       <Section>
-        <TitleDropdownSection title={`핫플레이스 (총 ${places.length}개)`} />
+        <TitleDropdownSection title={`${address} 핫플레이스 (총 ${places.length}개)`} />
         <Tabs places={places} />
       </Section>
     </NearContainer>

@@ -1,6 +1,12 @@
 import { Place } from '@/store/usePlaceStore';
 import axios from 'axios';
 
+interface AddressComponent {
+  long_name: string;
+  short_name: string;
+  types: string[];
+}
+
 const API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 /** Google Place API */
@@ -32,8 +38,7 @@ export const fetchNearByPlaces = async (lat: number, lng: number, types: string[
   try {
     const response = await api.post('/places:searchNearby', requestBody);
     const places = response.data.places;
-    console.log('Response:', places);
-    // const placeIds = response.data.places.map((place: Place) => place.id);
+
     return places;
   } catch (err) {
     console.error('Error fetching places: ', err);
@@ -55,6 +60,41 @@ const fetchPlacePhotos = async (placeName: string) => {
   }
 };
 
+/** Geocoding (현재 위치 주소 가져오기) */
+export const fetchFormattedAddress = async (lat: number, lng: number) => {
+  try {
+    const response = await axios.get(
+      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}&language=ko`,
+    );
+
+    const addressComponents = response.data.results[0]?.address_components;
+
+    // 시(도), 구, 동(읍, 면) 추출
+    const extractLocationDetails = (addressComponents: AddressComponent[]) => {
+      const city = addressComponents.find(component =>
+        component.types.includes('locality'),
+      )?.long_name;
+      const district = addressComponents.find(
+        component =>
+          component.types.includes('sublocality') ||
+          component.types.includes('sublocality_level_1'),
+      )?.long_name;
+      const province = addressComponents.find(component =>
+        component.types.includes('sublocality_level_2'),
+      )?.long_name;
+
+      return `${province || ''} ${city || ''} ${district || ''}`.trim();
+    };
+
+    const formattedAddress = extractLocationDetails(addressComponents);
+    return formattedAddress;
+  } catch (err) {
+    console.error('Error fetching geocode: ', err);
+    return null;
+  }
+};
+
+/** Nearby + photos 병합 */
 export const fetchPlacesInfo = async (lat: number, lng: number, types: string[]) => {
   try {
     // 1. 주변 장소 검색
