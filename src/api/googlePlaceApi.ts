@@ -67,23 +67,30 @@ export const fetchFormattedAddress = async (lat: number, lng: number) => {
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}&language=ko`,
     );
 
+    console.log('rrrrrrrrrr', response.data);
+
     const addressComponents = response.data.results[0]?.address_components;
 
-    // 시(도), 구, 동(읍, 면) 추출
+    // 시/군/구/읍/면/동 추출
     const extractLocationDetails = (addressComponents: AddressComponent[]) => {
-      const city = addressComponents.find(component =>
-        component.types.includes('locality'),
+      // 시 - locality + political
+      const city = addressComponents.find(
+        component => component.types.includes('locality') && component.types.includes('political'),
       )?.long_name;
+
+      // 구 - sublocality + sublocality_level_1
       const district = addressComponents.find(
         component =>
-          component.types.includes('sublocality') ||
+          component.types.includes('sublocality') &&
           component.types.includes('sublocality_level_1'),
       )?.long_name;
+
+      // 동 - sublocality_level_2
       const province = addressComponents.find(component =>
         component.types.includes('sublocality_level_2'),
       )?.long_name;
 
-      return `${province || ''} ${city || ''} ${district || ''}`.trim();
+      return `${city || ''} ${district || ''} ${province || ''}`.trim();
     };
 
     const formattedAddress = extractLocationDetails(addressComponents);
