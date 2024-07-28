@@ -30,7 +30,7 @@ export const fetchNearByPlaces = async (lat: number, lng: number, types: string[
           latitude: lat,
           longitude: lng,
         },
-        radius: 2000,
+        radius: 1000,
       },
     },
   };
@@ -67,7 +67,7 @@ export const fetchFormattedAddress = async (lat: number, lng: number) => {
       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${API_KEY}&language=ko`,
     );
 
-    console.log('rrrrrrrrrr', response.data);
+    // console.log('rrrrrrrrrr', response.data);
 
     const addressComponents = response.data.results[0]?.address_components;
 

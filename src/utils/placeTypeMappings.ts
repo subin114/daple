@@ -167,8 +167,6 @@ export const PLACE_TYPES = {
     'hamburger_restaurant',
     'vegan_restaurant',
     'vegetarian_restaurant',
-  ],
-  RESTAURANT_CATEGORIES: [
     'barbecue_restaurant',
     'brazilian_restaurant',
     'breakfast_restaurant',
