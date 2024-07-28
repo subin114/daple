@@ -2,22 +2,15 @@ import styled from '@emotion/styled';
 import TitleDropdownSection from './../layout/TitleDropdownSection';
 import Tabs from '../layout/Tabs';
 import { usePlaceStore } from '@/store/usePlaceStore';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { fetchPlacesInfo, fetchFormattedAddress } from '@/api/googlePlaceApi';
+import ErrorBoundary from './../../utils/ErrorBoundary';
 
 const Near = () => {
-  const { places, loading, error, setPlaces } = usePlaceStore();
+  const { places, setPlaces, setLoading, setError } = usePlaceStore();
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [address, setAddress] = useState('');
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
 
   /** 현재 위치 주소 가져오기 */
   useEffect(() => {
@@ -32,27 +25,34 @@ const Near = () => {
   }, []);
 
   /** 주변 장소 정보 가져오기 */
-  useEffect(() => {
-    const fetchNearbyPlaces = async () => {
+  const fetchPlacesForTab = useCallback(
+    async (types: string[]) => {
       if (lat !== null && lng !== null) {
-        const types = ['restaurant', 'cafe', 'museum', 'art_gallery'];
+        setLoading(true);
         try {
-          const data = await fetchPlacesInfo(lat, lng, types);
-          setPlaces(data);
+          const places = await fetchPlacesInfo(lat, lng, types);
+          setPlaces(places);
+          setLoading(false);
+          return places;
         } catch (error) {
           console.error('Error fetching nearby places:', error);
+          setError('주변 플레이스의 정보를 받아오는 데 실패했어요.');
+          setLoading(false);
+          return [];
         }
       }
-    };
-
-    fetchNearbyPlaces();
-  }, [lat, lng]);
+      return [];
+    },
+    [lat, lng, setLoading, setPlaces, setError],
+  );
 
   return (
     <NearContainer>
       <Section>
         <TitleDropdownSection title={`${address} 핫플레이스 (총 ${places.length}개)`} />
-        <Tabs places={places} />
+        <ErrorBoundary>
+          <Tabs fetchPlacesForTab={fetchPlacesForTab} />
+        </ErrorBoundary>
       </Section>
     </NearContainer>
   );

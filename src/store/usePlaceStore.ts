@@ -84,12 +84,16 @@ interface PlaceStore {
   places: Place[];
   setPlaces: (places: Place[]) => void;
   loading: boolean;
+  setLoading: (loading: boolean) => void;
   error: string | null;
+  setError: (error: string) => void;
 }
 
 export const usePlaceStore = create<PlaceStore>(set => ({
   places: [],
   setPlaces: (places: Place[]) => set({ places }),
   loading: false,
+  setLoading: (loading: boolean) => set({ loading }),
   error: null,
+  setError: (error: string) => set({ error }),
 }));
