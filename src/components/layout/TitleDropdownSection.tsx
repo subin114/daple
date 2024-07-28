@@ -14,7 +14,10 @@ interface TitleDropdownSectionProps {
 const TitleDropdownSection = ({ title }: TitleDropdownSectionProps) => {
   return (
     <TopSection>
-      <Title>{title}</Title>
+      <Title>
+        <img src="../../../public/icons/location_icon.svg" alt="location icon" />
+        {title}
+      </Title>
       <Select>
         <CustomSelectTrigger className="w-[130px]">
           <SelectValue placeholder="거리 순" />
@@ -44,6 +47,16 @@ const Title = styled.span`
   display: inline-block;
   font-size: 16px;
   font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  img {
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+  }
 `;
 
 const CustomSelectTrigger = styled(SelectTrigger)`
