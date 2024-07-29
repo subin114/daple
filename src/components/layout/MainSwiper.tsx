@@ -4,6 +4,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 import styled from '@emotion/styled';
+import { slide01, slide02, slide03 } from '../../assets/slideImg';
 
 interface swiper {
   name: string;
@@ -11,10 +12,9 @@ interface swiper {
 }
 
 const swiperImg: swiper[] = [
-  { name: '슬라이드 내용 작성1', imageUrl: '../../../public/slideImg/slide01.jpg' },
-  { name: '슬라이드 내용 작성2', imageUrl: '../../../public/slideImg/slide01.jpg' },
-  { name: '슬라이드 내용 작성3', imageUrl: '../../../public/slideImg/slide01.jpg' },
-  { name: '슬라이드 내용 작성4', imageUrl: '../../../public/slideImg/slide01.jpg' },
+  { name: '1', imageUrl: slide02 },
+  { name: '2', imageUrl: slide01 },
+  { name: '3', imageUrl: slide03 },
 ];
 
 const MainSwiper = () => {
@@ -55,12 +55,12 @@ const StyledSwiper = styled(SwiperComponent)`
   .swiper-pagination-bullet {
     width: 6px;
     height: 6px;
-    background-color: #56bec0;
+    background-color: #ffffff;
   }
 
   .swiper-button-next,
   .swiper-button-prev {
-    color: #56bec0;
+    color: #ffffff;
 
     &::after {
       font-size: 25px;
