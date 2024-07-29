@@ -3,7 +3,7 @@ import { Tabs as TabsContainer, TabsContent, TabsList, TabsTrigger } from '@/com
 import PlaceCardList from '../common/PlaceCardList';
 import { Place, usePlaceStore } from '@/store/usePlaceStore';
 import { PLACE_TYPES } from '@/utils/placeTypeMappings';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface TabData {
   value: string;
@@ -32,27 +32,43 @@ const tabs: TabData[] = [
 const Tabs = ({ fetchPlacesForTab }: TabsProps) => {
   const { loading, setLoading, error, setError } = usePlaceStore();
   const [activeTab, setActiveTab] = useState(tabs[0].value);
-  const [tabPlaces, setTabPlaces] = useState<Place[]>([]);
+  const [tabPlaces, setTabPlaces] = useState<{ [key: string]: Place[] }>(() =>
+    Object.fromEntries(tabs.map(tab => [tab.value, []])),
+  );
 
-  useEffect(() => {
-    const loadPlaces = async () => {
+  const tabPlacesRef = useRef(tabPlaces);
+
+  const loadPlaces = useCallback(
+    async (types: string[], tabValue: string) => {
       setLoading(true);
+      console.log('현재 탭 종류는 : ', tabValue, '현재 타입들 종류는 : ', types);
+
+      if (tabPlacesRef.current[tabValue].length > 0) {
+        setLoading(false);
+        return;
+      }
 
       try {
-        const tab = tabs.find(tab => tab.value === activeTab);
-        if (tab) {
-          const places = await fetchPlacesForTab(tab.types);
-          setTabPlaces(places);
-        }
+        const places = await fetchPlacesForTab(types);
+        console.log('places의 데이터 받아와보자 : ', places);
+        tabPlacesRef.current = { ...tabPlacesRef.current, [tabValue]: places };
+        setTabPlaces(tabPlacesRef.current);
       } catch (err) {
         console.error('Error fetching places: ', err);
-        setError('플레이스의 정보를 받아오는 데 실패했어요. 잠시 후 시도해주세요.');
+        setError('플레이스의 정보를 받아오는 데 실패했어요.');
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    };
+    },
+    [fetchPlacesForTab, setError, setLoading],
+  );
 
-    loadPlaces();
-  }, [activeTab, fetchPlacesForTab, setLoading, setError]);
+  useEffect(() => {
+    const tab = tabs.find(tab => tab.value === activeTab);
+    if (tab) {
+      loadPlaces(tab.types, activeTab);
+    }
+  }, [activeTab, loadPlaces]);
 
   return (
     <TabsContainer defaultValue={tabs[0].value} onValueChange={setActiveTab}>
@@ -67,11 +83,11 @@ const Tabs = ({ fetchPlacesForTab }: TabsProps) => {
       {tabs.map(tab => (
         <TabsContent value={tab.value} key={tab.value}>
           {loading ? (
-            <div>Loading...</div>
+            <div>로딩중...</div>
           ) : error ? (
-            <div>{error}</div>
-          ) : tabPlaces.length > 0 ? (
-            <PlaceCardList places={tabPlaces} />
+            <div>에러발생</div>
+          ) : tabPlaces[tab.value]?.length > 0 ? (
+            <PlaceCardList places={tabPlaces[tab.value]} />
           ) : (
             <NoPlacesMessage>해당하는 플레이스가 없습니다. ( ᴗ_ᴗ̩̩ )</NoPlacesMessage>
           )}

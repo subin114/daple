@@ -1,5 +1,5 @@
 export const placeTypeMappings: Record<string, string> = {
-  amusement_center: '놀이공원',
+  amusement_center: '오락실',
   amusement_park: '놀이공원',
   aquarium: '수족관',
   banquet_hall: '연회장',
@@ -22,7 +22,6 @@ export const placeTypeMappings: Record<string, string> = {
   visitor_center: '관광 안내 센터',
   wedding_venue: '웨딩 장소',
   zoo: '동물원',
-
   american_restaurant: '미국 음식점',
   bakery: '제과점',
   bar: '바',
@@ -63,15 +62,12 @@ export const placeTypeMappings: Record<string, string> = {
   vegan_restaurant: '비건 음식점',
   vegetarian_restaurant: '채식 음식점',
   vietnamese_restaurant: '베트남 음식점',
-
   art_gallery: '미술관',
   museum: '박물관',
   performing_arts_theater: '공연 예술 극장',
-
   accounting: '회계',
   atm: 'ATM',
   bank: '은행',
-
   dental_clinic: '치과',
   dentist: '치과 의사',
   doctor: '의사',
@@ -81,7 +77,6 @@ export const placeTypeMappings: Record<string, string> = {
   pharmacy: '약국',
   physiotherapist: '물리 치료사',
   spa: '스파',
-
   bed_and_breakfast: '민박',
   campground: '캠프장',
   camping_cabin: '캠핑 캐빈',
@@ -96,7 +91,6 @@ export const placeTypeMappings: Record<string, string> = {
   private_guest_room: '개인 게스트 룸',
   resort_hotel: '리조트 호텔',
   rv_park: 'RV 파크',
-
   auto_parts_store: '자동차 부품 상점',
   bicycle_store: '자전거 상점',
   book_store: '서점',
@@ -122,7 +116,6 @@ export const placeTypeMappings: Record<string, string> = {
   store: '상점',
   supermarket: '슈퍼마켓',
   wholesaler: '도매상',
-
   athletic_field: '운동장',
   fitness_center: '피트니스 센터',
   golf_course: '골프장',
@@ -133,7 +126,6 @@ export const placeTypeMappings: Record<string, string> = {
   sports_complex: '스포츠 단지',
   stadium: '경기장',
   swimming_pool: '수영장',
-
   airport: '공항',
   bus_station: '버스 정류장',
   bus_stop: '버스 정거장',
@@ -218,6 +210,7 @@ export const PLACE_TYPES = {
     'movie_rental',
     'movie_theater',
     'zoo',
+    'spa',
   ],
   SPORTS: [
     'athletic_field',

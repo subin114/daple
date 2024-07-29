@@ -105,11 +105,11 @@ export const fetchFormattedAddress = async (lat: number, lng: number) => {
 export const fetchPlacesInfo = async (lat: number, lng: number, types: string[]) => {
   try {
     // 1. 주변 장소 검색
-    const places = await fetchNearByPlaces(lat, lng, types);
+    const places = (await fetchNearByPlaces(lat, lng, types)) || [];
 
     // 2. 각 장소의 사진 참조 값 추출 및 사진 요청
     const placesWithPhotos = await Promise.all(
-      places.map(async (place: Place) => {
+      places?.map(async (place: Place) => {
         if (place.photos && place.photos.length > 0) {
           const getPlaceName = place.photos[0]?.name;
           const photo = await fetchPlacePhotos(getPlaceName);
