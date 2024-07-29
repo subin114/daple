@@ -4,6 +4,25 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 import styled from '@emotion/styled';
+import {
+  seoul,
+  busan,
+  daegu,
+  incheon,
+  gwangju,
+  daejeon,
+  ulsan,
+  sejong,
+  gyeonggi,
+  gangwon,
+  chungbuk,
+  chungnam,
+  jeonbuk,
+  jeonnam,
+  gyeongbuk,
+  gyeongnam,
+  jeju,
+} from '../../assets/regionsImg';
 
 interface location {
   name: string;
@@ -11,23 +30,23 @@ interface location {
 }
 
 const locations: location[] = [
-  { name: '서울', imageUrl: '../../../public/regionsImg/seoul.jpg' },
-  { name: '부산', imageUrl: '../../../public/regionsImg/busan.jpg' },
-  { name: '대구', imageUrl: '../../../public/regionsImg/seoul.jpg' },
-  { name: '인천', imageUrl: '../../../public/regionsImg/busan.jpg' },
-  { name: '광주', imageUrl: '../../../public/regionsImg/gyeongju.jpg' },
-  { name: '대전', imageUrl: '../../../public/regionsImg/jeju.jpg' },
-  { name: '울산', imageUrl: '../../../public/regionsImg/gangneung.jpg' },
-  { name: '세종', imageUrl: '../../../public/regionsImg/sokcho.jpg' },
-  { name: '경기', imageUrl: '../../../public/regionsImg/yeosu.jpg' },
-  { name: '강원', imageUrl: '../../../public/regionsImg/gyeongju.jpg' },
-  { name: '충북', imageUrl: '../../../public/regionsImg/busan.jpg' },
-  { name: '충남', imageUrl: '../../../public/regionsImg/gangneung.jpg' },
-  { name: '전북', imageUrl: '../../../public/regionsImg/gangneung.jpg' },
-  { name: '전남', imageUrl: '../../../public/regionsImg/yeosu.jpg' },
-  { name: '경북', imageUrl: '../../../public/regionsImg/jeju.jpg' },
-  { name: '경남', imageUrl: '../../../public/regionsImg/incheon.jpg' },
-  { name: '제주', imageUrl: '../../../public/regionsImg/gyeongju.jpg' },
+  { name: '서울', imageUrl: seoul },
+  { name: '부산', imageUrl: busan },
+  { name: '대구', imageUrl: daegu },
+  { name: '인천', imageUrl: incheon },
+  { name: '광주', imageUrl: gwangju },
+  { name: '대전', imageUrl: daejeon },
+  { name: '울산', imageUrl: ulsan },
+  { name: '세종', imageUrl: sejong },
+  { name: '경기', imageUrl: gyeonggi },
+  { name: '강원', imageUrl: gangwon },
+  { name: '충북', imageUrl: chungbuk },
+  { name: '충남', imageUrl: chungnam },
+  { name: '전북', imageUrl: jeonbuk },
+  { name: '전남', imageUrl: jeonnam },
+  { name: '경북', imageUrl: gyeongbuk },
+  { name: '경남', imageUrl: gyeongnam },
+  { name: '제주', imageUrl: jeju },
 ];
 
 const RegionSwiper = () => {
