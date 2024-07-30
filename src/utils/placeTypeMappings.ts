@@ -1,7 +1,7 @@
 export const placeTypeMappings: Record<string, string> = {
   amusement_center: '오락실',
   amusement_park: '놀이공원',
-  aquarium: '수족관',
+  aquarium: '아쿠아리움',
   banquet_hall: '연회장',
   bowling_alley: '볼링장',
   casino: '카지노',
@@ -182,7 +182,6 @@ export const PLACE_TYPES = {
     'sporting_goods_store',
     'book_store',
     'gift_shop',
-    'store',
     'liquor_store',
     'shoe_store',
     'market',
@@ -212,10 +211,7 @@ export const PLACE_TYPES = {
     'spa',
   ],
   SPORTS: [
-    'athletic_field',
-    'fitness_center',
     'golf_course',
-    'gym',
     'playground',
     'ski_resort',
     'sports_club',
@@ -240,7 +236,6 @@ export const PLACE_TYPES = {
   ],
   TRAFFIC: [
     'bus_station',
-    'bus_stop',
     'light_rail_station',
     'park_and_ride',
     'subway_station',
