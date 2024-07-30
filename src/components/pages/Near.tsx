@@ -11,6 +11,7 @@ const Near = () => {
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [address, setAddress] = useState('');
+  const [activeTab, setActiveTab] = useState<string>('cafe');
 
   /** 현재 위치 주소 가져오기 */
   useEffect(() => {
@@ -46,12 +47,22 @@ const Near = () => {
     [lat, lng, setLoading, setPlaces, setError],
   );
 
+  /** 탭 변경 시 호출되는 함수 */
+  const handleTabChange = (tabValue: string) => {
+    setActiveTab(tabValue);
+  };
+
   return (
     <NearContainer>
       <Section>
         <TitleDropdownSection title={`${address} 핫플레이스 (총 ${places.length}개)`} />
         <ErrorBoundary>
-          <Tabs fetchPlacesForTab={fetchPlacesForTab} />
+          <Tabs
+            fetchPlacesForTab={fetchPlacesForTab}
+            activeTab={activeTab}
+            handleTabChange={handleTabChange}
+            places={places}
+          />
         </ErrorBoundary>
       </Section>
     </NearContainer>

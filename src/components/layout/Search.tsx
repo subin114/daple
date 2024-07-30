@@ -1,41 +1,29 @@
 import styled from '@emotion/styled';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Location } from '../pages/Region';
 
-interface location {
-  name: string;
+interface SearchProps {
+  locations: Location[];
+  handleLocationChange: (location: Location) => void;
+  activeLocation: string;
 }
 
-const locations: location[] = [
-  { name: '서울' },
-  { name: '부산' },
-  { name: '대구' },
-  { name: '인천' },
-  { name: '광주' },
-  { name: '대전' },
-  { name: '울산' },
-  { name: '세종' },
-  { name: '경기' },
-  { name: '강원' },
-  { name: '충북' },
-  { name: '충남' },
-  { name: '전북' },
-  { name: '전남' },
-  { name: '경북' },
-  { name: '경남' },
-  { name: '제주' },
-];
-
-const Search = () => {
+const Search = ({ locations, handleLocationChange, activeLocation }: SearchProps) => {
   return (
     <SearchContainer>
       <Text>
         <span>지역</span> 또는 <span>플레이스</span>의 이름을 입력하세요!
       </Text>
-      <StyledInput placeholder="ex. 여수" />
+      <StyledInput placeholder="ex. 여수 맛집, 강릉 주변 카페" />
       <RegionBtnWrap>
         {locations.map(location => (
-          <Btn variant="outline" key={location.name}>
+          <Btn
+            variant="outline"
+            key={location.name}
+            onClick={() => handleLocationChange(location)}
+            isActive={location.name === activeLocation}
+          >
             {location.name}
           </Btn>
         ))}
@@ -87,10 +75,18 @@ const RegionBtnWrap = styled.div`
   gap: 10px;
 `;
 
-const Btn = styled(Button)`
+const Btn = styled(Button, {
+  shouldForwardProp: prop => prop !== 'isActive',
+})<{ isActive: boolean }>`
   height: 30px;
   font-size: 14px;
   border-radius: 20px;
+  ${({ isActive }) =>
+    isActive &&
+    `
+  background-color: #56bec0;
+  color: #fff;
+  `}
 
   &:hover {
     background-color: #56bec0;

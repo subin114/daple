@@ -3,7 +3,7 @@ import { Tabs as TabsContainer, TabsContent, TabsList, TabsTrigger } from '@/com
 import PlaceCardList from '../common/PlaceCardList';
 import { Place, usePlaceStore } from '@/store/usePlaceStore';
 import { PLACE_TYPES } from '@/utils/placeTypeMappings';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 
 interface TabData {
   value: string;
@@ -13,6 +13,9 @@ interface TabData {
 
 interface TabsProps {
   fetchPlacesForTab: (types: string[]) => Promise<Place[]>;
+  activeTab: string;
+  handleTabChange: (tabValue: string) => void;
+  places: Place[];
 }
 
 const tabs: TabData[] = [
@@ -29,49 +32,56 @@ const tabs: TabData[] = [
   { value: 'traffic', label: '교통', types: PLACE_TYPES.TRAFFIC },
 ];
 
-const Tabs = ({ fetchPlacesForTab }: TabsProps) => {
-  const { loading, setLoading, error, setError } = usePlaceStore();
-  const [activeTab, setActiveTab] = useState(tabs[0].value);
-  const [tabPlaces, setTabPlaces] = useState<{ [key: string]: Place[] }>(() =>
-    Object.fromEntries(tabs.map(tab => [tab.value, []])),
-  );
+const Tabs = ({ fetchPlacesForTab, activeTab, handleTabChange, places }: TabsProps) => {
+  const { loading, error } = usePlaceStore();
+  // const [activeTab, setActiveTab] = useState(tabs[0].value);
+  // const [tabPlaces, setTabPlaces] = useState<{ [key: string]: Place[] }>(() =>
+  //   Object.fromEntries(tabs.map(tab => [tab.value, []])),
+  // );
 
-  const tabPlacesRef = useRef(tabPlaces);
+  // const tabPlacesRef = useRef(tabPlaces);
 
-  const loadPlaces = useCallback(
-    async (types: string[], tabValue: string) => {
-      setLoading(true);
-      console.log('현재 탭 종류는 : ', tabValue, '현재 타입들 종류는 : ', types);
+  // const loadPlaces = useCallback(
+  //   async (types: string[], tabValue: string) => {
+  //     setLoading(true);
+  //     console.log('현재 탭 종류는 : ', tabValue, '현재 타입들 종류는 : ', types);
 
-      if (tabPlacesRef.current[tabValue].length > 0) {
-        setLoading(false);
-        return;
-      }
+  //     if (tabPlacesRef.current[tabValue].length > 0) {
+  //       setLoading(false);
+  //       return;
+  //     }
 
-      try {
-        const places = await fetchPlacesForTab(types);
-        console.log('places의 데이터 받아와보자 : ', places);
-        tabPlacesRef.current = { ...tabPlacesRef.current, [tabValue]: places };
-        setTabPlaces(tabPlacesRef.current);
-      } catch (err) {
-        console.error('Error fetching places: ', err);
-        setError('플레이스의 정보를 받아오는 데 실패했어요.');
-      } finally {
-        setLoading(false);
-      }
-    },
-    [fetchPlacesForTab, setError, setLoading],
-  );
+  //     try {
+  //       const places = await fetchPlacesForTab(types);
+  //       console.log('places의 데이터 받아와보자 : ', places);
+  //       tabPlacesRef.current = { ...tabPlacesRef.current, [tabValue]: places };
+  //       setTabPlaces(tabPlacesRef.current);
+  //     } catch (err) {
+  //       console.error('Error fetching places: ', err);
+  //       setError('플레이스의 정보를 받아오는 데 실패했어요.');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   },
+  //   [fetchPlacesForTab, setError, setLoading],
+  // );
+
+  // useEffect(() => {
+  //   const tab = tabs.find(tab => tab.value === activeTab);
+  //   if (tab) {
+  //     loadPlaces(tab.types, activeTab);
+  //   }
+  // }, [activeTab, loadPlaces]);
 
   useEffect(() => {
     const tab = tabs.find(tab => tab.value === activeTab);
     if (tab) {
-      loadPlaces(tab.types, activeTab);
+      fetchPlacesForTab(tab.types);
     }
-  }, [activeTab, loadPlaces]);
+  }, [activeTab, fetchPlacesForTab]);
 
   return (
-    <TabsContainer defaultValue={tabs[0].value} onValueChange={setActiveTab}>
+    <TabsContainer defaultValue={tabs[0].value} onValueChange={handleTabChange}>
       <StyledTabsList>
         {tabs.map(tab => (
           <TabsTrigger value={tab.value} key={tab.value}>
@@ -86,8 +96,8 @@ const Tabs = ({ fetchPlacesForTab }: TabsProps) => {
             <div>로딩중...</div>
           ) : error ? (
             <div>에러발생</div>
-          ) : tabPlaces[tab.value]?.length > 0 ? (
-            <PlaceCardList places={tabPlaces[tab.value]} />
+          ) : places.length > 0 ? (
+            <PlaceCardList places={places} />
           ) : (
             <NoPlacesMessage>해당하는 플레이스가 없습니다. ( ᴗ_ᴗ̩̩ )</NoPlacesMessage>
           )}
