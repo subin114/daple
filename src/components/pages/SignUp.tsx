@@ -89,7 +89,7 @@ const SignUp = () => {
   };
 
   return (
-    <LoginContainer>
+    <SignUpContainer>
       <Form onSubmit={onSubmit}>
         <Text>Sign Up</Text>
         <InputWrap>
@@ -131,11 +131,11 @@ const SignUp = () => {
 
         <Btn type="submit">회원가입</Btn>
       </Form>
-    </LoginContainer>
+    </SignUpContainer>
   );
 };
 
-const LoginContainer = styled.section`
+const SignUpContainer = styled.section`
   max-width: 1200px;
   width: auto;
   height: 100%;

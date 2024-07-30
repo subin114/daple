@@ -75,7 +75,7 @@ const Region = () => {
   };
 
   return (
-    <NearContainer>
+    <RegionContainer>
       <Search
         locations={locations}
         handleLocationChange={handleLocationChange}
@@ -92,11 +92,11 @@ const Region = () => {
           places={regionsPlaces}
         />
       </Section>
-    </NearContainer>
+    </RegionContainer>
   );
 };
 
-const NearContainer = styled.div`
+const RegionContainer = styled.div`
   max-width: 1200px;
   width: auto;
   min-height: calc(100vh - 330px);
