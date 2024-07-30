@@ -145,7 +145,6 @@ export const PLACE_TYPES = {
   CAFE_AND_DESSERT: ['cafe', 'coffee_shop', 'bakery', 'sandwich_shop', 'ice_cream_shop'],
   RESTAURANTS: [
     'restaurant',
-    'food',
     'korean_restaurant',
     'japanese_restaurant',
     'chinese_restaurant',
