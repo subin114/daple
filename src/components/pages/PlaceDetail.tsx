@@ -3,7 +3,6 @@ import styled from '@emotion/styled';
 import ReviewSwiper from './../layout/ReviewSwiper';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchPlacesInfo } from '@/api/googlePlaceApi';
 
 const PlaceDetail = () => {
   const {
@@ -29,9 +28,21 @@ const PlaceDetail = () => {
   useEffect(() => {
     if (!currentPlaceId) return;
 
-    console.log('현재 ID값 :::::::::::: ', currentPlaceId);
-    console.log('places 데이터', places);
-    console.log('regionsPlaces 데이터', regionsPlaces);
+    // 로컬 스토리지 사용
+    const storedDetailPlace = localStorage.getItem(`placeDetail_${currentPlaceId}`);
+    if (storedDetailPlace) {
+      setDetailPlace(JSON.parse(storedDetailPlace));
+      setLoading(false);
+      return;
+    }
+
+    const saveDetailPlaceToLocalStorage = (place: Place | null) => {
+      if (place) {
+        localStorage.setItem(`placeDetail_${currentPlaceId}`, JSON.stringify(place));
+      } else {
+        localStorage.removeItem(`placeDetail_${currentPlaceId}`);
+      }
+    };
 
     const fetchDetailPlace = () => {
       setLoading(true);
@@ -43,13 +54,16 @@ const PlaceDetail = () => {
 
         if (!foundPlace) {
           setDetailPlace(null);
+          saveDetailPlaceToLocalStorage(null);
+        } else {
+          setDetailPlace(foundPlace);
+          saveDetailPlaceToLocalStorage(foundPlace);
         }
-        console.log('플레이스의 상세정보', foundPlace);
-        setDetailPlace(foundPlace ?? null);
       } catch (err) {
         console.error('place detail fetching error: ', err);
         setError('플레이스를 찾을 수 없습니다.');
         setDetailPlace(null);
+        saveDetailPlaceToLocalStorage(null);
       } finally {
         setLoading(false);
       }
