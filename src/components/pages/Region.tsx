@@ -90,6 +90,7 @@ const Region = () => {
           activeTab={activeTab}
           handleTabChange={handleTabChange}
           places={regionsPlaces}
+          sourcePage="region"
         />
       </Section>
     </RegionContainer>

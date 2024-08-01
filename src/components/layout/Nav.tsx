@@ -12,11 +12,12 @@ interface MenuProps {
 const Nav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const isActive = (path: string) => location.pathname === path;
+  // const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => location.pathname.startsWith(path);
 
   const { isAuthenticated, userInfo, isLoading, setLoading, logout } = useCurAuthStore();
 
-  console.log('UserInfo in Nav:', userInfo); // 디버깅용
+  // console.log('UserInfo in Nav:', userInfo); // 디버깅용
 
   useEffect(() => {
     setLoading(true);

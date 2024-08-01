@@ -40,7 +40,7 @@ export interface Place {
   internationalPhoneNumber: number;
   name: string;
   nationalPhoneNumber: string;
-  photo: string;
+  photo: string[];
   photos?: {
     authorAttributions: {
       display: string;
@@ -76,6 +76,7 @@ export interface Place {
       text: string;
     };
   }[];
+  shortFormattedAddress: string;
   types?: string[];
   websiteUri?: string;
 }
@@ -89,6 +90,8 @@ interface PlaceStore {
   setLoading: (loading: boolean) => void;
   error: string | null;
   setError: (error: string) => void;
+  currentPlaceId: string | null;
+  setCurrentPlaceId: (id: string | null) => void;
 }
 
 export const usePlaceStore = create<PlaceStore>(set => ({
@@ -100,4 +103,6 @@ export const usePlaceStore = create<PlaceStore>(set => ({
   setLoading: (loading: boolean) => set({ loading }),
   error: null,
   setError: (error: string) => set({ error }),
+  currentPlaceId: null,
+  setCurrentPlaceId: (id: string | null) => set({ currentPlaceId: id }),
 }));

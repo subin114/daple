@@ -8,8 +8,8 @@ import BookMark from '../components/pages/BookMark';
 import MyPage from '../components/pages/MyPage';
 import Login from '../components/pages/Login';
 import SignUp from '../components/pages/SignUp';
-import PopularList from '../components/layout/PopularList';
 import Footer from '../components/layout/Footer';
+import PlaceDetail from '@/components/pages/PlaceDetail';
 
 const Router = () => {
   const location = useLocation();
@@ -20,8 +20,9 @@ const Router = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/near" element={<Near />} />
-        <Route path="/popular" element={<PopularList />} />
+        <Route path="/near/detail/:id" element={<PlaceDetail />} />
         <Route path="/region" element={<Region />} />
+        <Route path="/region/detail/:id" element={<PlaceDetail />} />
         <Route path="/community" element={<Community />} />
         <Route path="/bookmark" element={<BookMark />} />
         <Route path="/mypage" element={<MyPage />} />

@@ -62,6 +62,7 @@ const Near = () => {
             activeTab={activeTab}
             handleTabChange={handleTabChange}
             places={places}
+            sourcePage="near"
           />
         </ErrorBoundary>
       </Section>

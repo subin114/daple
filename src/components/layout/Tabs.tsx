@@ -16,6 +16,7 @@ interface TabsProps {
   activeTab: string;
   handleTabChange: (tabValue: string) => void;
   places: Place[];
+  sourcePage: string;
 }
 
 const tabs: TabData[] = [
@@ -32,7 +33,7 @@ const tabs: TabData[] = [
   { value: 'traffic', label: '교통', types: PLACE_TYPES.TRAFFIC },
 ];
 
-const Tabs = ({ fetchPlacesForTab, activeTab, handleTabChange, places }: TabsProps) => {
+const Tabs = ({ fetchPlacesForTab, activeTab, handleTabChange, places, sourcePage }: TabsProps) => {
   const { loading, error } = usePlaceStore();
   // const [activeTab, setActiveTab] = useState(tabs[0].value);
   // const [tabPlaces, setTabPlaces] = useState<{ [key: string]: Place[] }>(() =>
@@ -74,11 +75,21 @@ const Tabs = ({ fetchPlacesForTab, activeTab, handleTabChange, places }: TabsPro
   // }, [activeTab, loadPlaces]);
 
   useEffect(() => {
-    const tab = tabs.find(tab => tab.value === activeTab);
-    if (tab) {
-      fetchPlacesForTab(tab.types);
-    }
+    const loadPlaces = async () => {
+      const tab = tabs.find(tab => tab.value === activeTab);
+      if (tab) {
+        await fetchPlacesForTab(tab.types);
+      }
+    };
+
+    loadPlaces();
   }, [activeTab, fetchPlacesForTab]);
+  // useEffect(() => {
+  //   const tab = tabs.find(tab => tab.value === activeTab);
+  //   if (tab) {
+  //     fetchPlacesForTab(tab.types);
+  //   }
+  // }, [activeTab, fetchPlacesForTab]);
 
   return (
     <TabsContainer defaultValue={tabs[0].value} onValueChange={handleTabChange}>
@@ -97,7 +108,7 @@ const Tabs = ({ fetchPlacesForTab, activeTab, handleTabChange, places }: TabsPro
           ) : error ? (
             <div>에러발생</div>
           ) : places.length > 0 ? (
-            <PlaceCardList places={places} />
+            <PlaceCardList places={places} sourcePage={sourcePage} />
           ) : (
             <NoPlacesMessage>해당하는 플레이스가 없습니다. ( ᴗ_ᴗ̩̩ )</NoPlacesMessage>
           )}

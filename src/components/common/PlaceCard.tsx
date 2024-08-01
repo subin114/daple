@@ -1,17 +1,33 @@
 import styled from '@emotion/styled';
 import { Box, Image } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+import { usePlaceStore } from '@/store/usePlaceStore';
 
 interface CardProps {
+  id: string;
   imageUrl: string;
   category: string;
   title: string;
   address: string;
+  sourcePage: string;
 }
 
-const PlaceCard = ({ imageUrl, category, title, address }: CardProps) => {
+const PlaceCard = ({ id, imageUrl, category, title, address, sourcePage }: CardProps) => {
+  const { setCurrentPlaceId } = usePlaceStore();
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    setCurrentPlaceId(id);
+    if (sourcePage === 'near') {
+      navigate(`/near/detail/${id}`);
+    } else if (sourcePage === 'region') {
+      navigate(`/region/detail/${id}`);
+    }
+  };
+
   return (
     <StyledBox overflow="hidden" bg="white">
-      <ImageBox>
+      <ImageBox onClick={handleCardClick}>
         <Image src={imageUrl} alt={title} />
       </ImageBox>
       <Box p="4">
@@ -28,6 +44,11 @@ const StyledBox = styled(Box)`
     width: 300px;
     height: 180px;
     object-fit: cover;
+    transition: filter 0.3s;
+
+    &:hover {
+      filter: brightness(70%);
+    }
   }
 
   > div {
@@ -43,6 +64,7 @@ const ImageBox = styled.div`
   border-radius: 15px;
   background-color: #f1f5f9;
   border: 1px solid #f1f5f9;
+  cursor: pointer;
 `;
 
 const Category = styled.div`

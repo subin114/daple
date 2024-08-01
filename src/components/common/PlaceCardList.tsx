@@ -5,13 +5,14 @@ import { placeTypeMappings } from '@/utils/placeTypeMappings';
 
 interface PlaceCardListProps {
   places: Place[];
+  sourcePage: string;
 }
 
 const translateType = (type: string): string => {
   return placeTypeMappings[type] || type;
 };
 
-const PlaceCardList = ({ places }: PlaceCardListProps) => {
+const PlaceCardList = ({ places, sourcePage }: PlaceCardListProps) => {
   const columns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4 });
 
   return (
@@ -26,10 +27,12 @@ const PlaceCardList = ({ places }: PlaceCardListProps) => {
         return (
           <PlaceCard
             key={place.id}
-            imageUrl={place.photo ?? '../../../public/no_image.png'}
+            id={place.id}
+            imageUrl={place.photo[0] ?? '../../../public/no_image.png'}
             category={translatedType}
             title={place.displayName?.text ?? 'no title'}
             address={place.formattedAddress ?? 'no vicinity'}
+            sourcePage={sourcePage}
           />
         );
       })}
