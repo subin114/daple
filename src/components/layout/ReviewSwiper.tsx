@@ -86,7 +86,11 @@ const ReviewSwiper = ({ reviews }: ReviewSwiperProps) => {
             </svg>
             {review.rating}
           </Rating>
-          <Review>{review.text?.text ?? '작성한 리뷰가 없습니다.'}</Review>
+          {review.text?.text ? (
+            <Review>{review.text?.text}</Review>
+          ) : (
+            <None>리뷰를 작성하지 않았어요</None>
+          )}
           <Time>{review.relativePublishTimeDescription}</Time>
         </StyledSwiperSlide>
       ))}
@@ -96,6 +100,7 @@ const ReviewSwiper = ({ reviews }: ReviewSwiperProps) => {
 
 const StyledSwiper = styled(SwiperComponent)`
   height: auto;
+  margin-top: 10px;
 
   .swiper-wrapper {
     width: 100%;
@@ -166,6 +171,12 @@ const Nickname = styled.span`
 const Review = styled.span`
   margin-bottom: 5px;
   text-align: justify;
+`;
+
+const None = styled.span`
+  margin-bottom: 5px;
+  text-align: justify;
+  color: #ccc;
 `;
 
 const Rating = styled.span`

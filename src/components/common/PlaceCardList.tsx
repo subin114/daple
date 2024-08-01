@@ -8,7 +8,7 @@ interface PlaceCardListProps {
   sourcePage: string;
 }
 
-const translateType = (type: string): string => {
+export const translateType = (type: string): string => {
   return placeTypeMappings[type] || type;
 };
 

@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import ReviewSwiper from './../layout/ReviewSwiper';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { translateType } from '../common/PlaceCardList';
 
 const PlaceDetail = () => {
   const {
@@ -52,6 +53,8 @@ const PlaceDetail = () => {
           places.find(place => place.id === currentPlaceId) ||
           regionsPlaces.find(place => place.id === currentPlaceId);
 
+        console.log('fff', foundPlace);
+
         if (!foundPlace) {
           setDetailPlace(null);
           saveDetailPlaceToLocalStorage(null);
@@ -72,12 +75,16 @@ const PlaceDetail = () => {
     fetchDetailPlace();
   }, [currentPlaceId, places, regionsPlaces]);
 
-  if (loading) return <div>로딩 중...</div>;
-  if (error) return <div>에러</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error</div>;
 
   if (!detailPlace) {
     return <PlaceDetailContainer>플레이스가 존재하지 않습니다.</PlaceDetailContainer>;
   }
+
+  const translatedType = detailPlace.primaryType
+    ? translateType(detailPlace.primaryType)
+    : 'Unknown';
 
   return (
     <PlaceDetailContainer>
@@ -107,7 +114,7 @@ const PlaceDetail = () => {
           </SmallWrap>
         </Img>
         <Name>
-          <span>{detailPlace.primaryTypeDisplayName?.text}</span>
+          <span>{translatedType}</span>
           <h1>{detailPlace.displayName.text}</h1>
         </Name>
         <DetailInfoSection>
@@ -135,7 +142,11 @@ const PlaceDetail = () => {
                 </svg>
                 주소
               </b>
-              <span>{detailPlace.formattedAddress || '제공되는 정보가 없습니다.'}</span>
+              {detailPlace.formattedAddress ? (
+                <span>{detailPlace.formattedAddress}</span>
+              ) : (
+                <None>제공하는 정보가 없어요</None>
+              )}
             </Address>
             <Opening>
               <b>
@@ -153,11 +164,16 @@ const PlaceDetail = () => {
                     d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   />
                 </svg>
-                영업시간
+                영업시간 ({detailPlace.currentOpeningHours?.openNow ? '영업 중' : '영업 종료'})
               </b>
-              {detailPlace.currentOpeningHours?.weekdayDescriptions?.map((description, idx) => (
-                <Time key={idx}>{description}</Time>
-              )) || '제공되는 정보가 없습니다.'}
+
+              {detailPlace.currentOpeningHours?.weekdayDescriptions ? (
+                detailPlace.currentOpeningHours?.weekdayDescriptions?.map((description, idx) => (
+                  <Time key={idx}>{description}</Time>
+                ))
+              ) : (
+                <None>제공하는 정보가 없어요</None>
+              )}
             </Opening>
             <Call>
               <b>
@@ -177,7 +193,11 @@ const PlaceDetail = () => {
                 </svg>
                 전화번호
               </b>
-              <span>{detailPlace.nationalPhoneNumber || '제공되는 정보가 없습니다.'}</span>
+              {detailPlace.nationalPhoneNumber ? (
+                <span>{detailPlace.nationalPhoneNumber}</span>
+              ) : (
+                <None>제공하는 정보가 없어요</None>
+              )}
             </Call>
             <Website>
               <b>
@@ -197,9 +217,13 @@ const PlaceDetail = () => {
                 </svg>
                 웹사이트
               </b>
-              <a href={detailPlace.websiteUri} target="_blank" rel="noopener noreferrer">
-                {detailPlace.websiteUri || '제공되는 정보가 없습니다.'}
-              </a>
+              {detailPlace.websiteUri ? (
+                <a href={detailPlace.websiteUri} target="_blank" rel="noopener noreferrer">
+                  {detailPlace.websiteUri}
+                </a>
+              ) : (
+                <None>제공하는 정보가 없어요</None>
+              )}
             </Website>
           </DetailInfo>
           <Map>
@@ -238,7 +262,11 @@ const PlaceDetail = () => {
             </svg>
             리뷰 (총 {detailPlace.reviews?.length || 0}개)
           </b>
-          <ReviewSwiper reviews={detailPlace.reviews} />
+          {detailPlace.reviews ? (
+            <ReviewSwiper reviews={detailPlace.reviews} />
+          ) : (
+            <None>작성된 리뷰가 없어요</None>
+          )}
         </Review>
       </Section>
     </PlaceDetailContainer>
@@ -475,7 +503,6 @@ const Review = styled.div`
   b {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
 
     svg {
       width: 16px;
@@ -483,6 +510,12 @@ const Review = styled.div`
       margin-right: 3px;
     }
   }
+`;
+
+const None = styled.span`
+  margin-left: 20px;
+  color: #ccc;
+  font-size: 13px;
 `;
 
 export default PlaceDetail;
