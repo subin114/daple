@@ -47,16 +47,16 @@ export const fetchNearByPlaces = async (lat: number, lng: number, types: string[
 };
 
 /** Photos */
-const fetchPlacePhotos = async (placeName: string) => {
+const fetchPlacePhotos = async (placeNames: string[]) => {
   try {
-    const response = await axios.get(
-      `https://places.googleapis.com/v1/${placeName}/media?key=${API_KEY}&maxHeightPx=1600&maxWidthPx=1000`,
+    const photoUrls = placeNames.map(
+      placeName =>
+        `https://places.googleapis.com/v1/${placeName}/media?key=${API_KEY}&maxHeightPx=1600&maxWidthPx=1000`,
     );
-
-    return response.request.responseURL;
+    return photoUrls;
   } catch (err) {
     console.error('Error fetching place photos: ', err);
-    return null;
+    return [];
   }
 };
 
@@ -111,11 +111,12 @@ export const fetchPlacesInfo = async (lat: number, lng: number, types: string[])
     const placesWithPhotos = await Promise.all(
       places?.map(async (place: Place) => {
         if (place.photos && place.photos.length > 0) {
-          const getPlaceName = place.photos[0]?.name;
+          const getPlaceName = place.photos.map(photo => photo.name);
           const photo = await fetchPlacePhotos(getPlaceName);
+
           return { ...place, photo };
         } else {
-          return { ...place, photo: null };
+          return { ...place, photo: [] };
         }
       }),
     );
