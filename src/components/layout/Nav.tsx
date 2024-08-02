@@ -70,7 +70,7 @@ const Nav = () => {
             <Menu onClick={() => navigate('/near')} active={isActive('/near')}>
               내 근처 핫플
             </Menu>
-            <Menu onClick={() => navigate('/region')} active={isActive('/region')}>
+            <Menu onClick={() => navigate('/region/서울')} active={isActive('/region')}>
               지역별 핫플
             </Menu>
             <Menu onClick={() => navigate('/community')} active={isActive('/community')}>

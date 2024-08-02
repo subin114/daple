@@ -3,8 +3,9 @@ import TitleDropdownSection from './../layout/TitleDropdownSection';
 import Tabs from '../layout/Tabs';
 import Search from '../layout/Search';
 import { usePlaceStore } from '@/store/usePlaceStore';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { fetchPlacesInfo } from '@/api/googlePlaceApi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export interface Location {
   name: string;
@@ -33,9 +34,11 @@ const locations: Location[] = [
 ];
 
 const Region = () => {
+  const { locationName } = useParams();
   const { regionsPlaces, setRegionsPlaces, setLoading, setError } = usePlaceStore();
-  const [lat, setLat] = useState<number | null>(37.514575);
-  const [lng, setLng] = useState<number | null>(127.0495556);
+  const [lat, setLat] = useState<number>(37.514575);
+  const [lng, setLng] = useState<number>(127.0495556);
+  const navigate = useNavigate();
 
   const [activeLocation, setActiveLocation] = useState<string>(locations[0].name);
   const [activeTab, setActiveTab] = useState<string>('cafe');
@@ -67,7 +70,19 @@ const Region = () => {
     setLat(location.lat);
     setLng(location.lng);
     setActiveLocation(location.name);
+    navigate(`/region/${location.name}`);
   };
+
+  useEffect(() => {
+    const location = locations.find(location => location.name === locationName);
+    if (location) {
+      setLat(location.lat);
+      setLng(location.lng);
+      setActiveLocation(location.name);
+    } else {
+      console.error('에뤄~~~');
+    }
+  }, [locationName]);
 
   /** 탭 변경 시 */
   const handleTabChange = (tabValue: string) => {

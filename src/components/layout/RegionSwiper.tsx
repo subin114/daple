@@ -23,37 +23,41 @@ import {
   gyeongnam,
   jeju,
 } from '../../assets/regionsImg';
+import { useNavigate } from 'react-router-dom';
 
 interface location {
   name: string;
   imageUrl: string;
+  link: string;
 }
 
 const locations: location[] = [
-  { name: '서울', imageUrl: seoul },
-  { name: '부산', imageUrl: busan },
-  { name: '대구', imageUrl: daegu },
-  { name: '인천', imageUrl: incheon },
-  { name: '광주', imageUrl: gwangju },
-  { name: '대전', imageUrl: daejeon },
-  { name: '울산', imageUrl: ulsan },
-  { name: '세종', imageUrl: sejong },
-  { name: '경기', imageUrl: gyeonggi },
-  { name: '강원', imageUrl: gangwon },
-  { name: '충북', imageUrl: chungbuk },
-  { name: '충남', imageUrl: chungnam },
-  { name: '전북', imageUrl: jeonbuk },
-  { name: '전남', imageUrl: jeonnam },
-  { name: '경북', imageUrl: gyeongbuk },
-  { name: '경남', imageUrl: gyeongnam },
-  { name: '제주', imageUrl: jeju },
+  { name: '서울', imageUrl: seoul, link: '/region/서울' },
+  { name: '부산', imageUrl: busan, link: '/region/부산' },
+  { name: '대구', imageUrl: daegu, link: '/region/대구' },
+  { name: '인천', imageUrl: incheon, link: '/region/인천' },
+  { name: '광주', imageUrl: gwangju, link: '/region/광주' },
+  { name: '대전', imageUrl: daejeon, link: '/region/대전' },
+  { name: '울산', imageUrl: ulsan, link: '/region/울산' },
+  { name: '세종', imageUrl: sejong, link: '/region/세종' },
+  { name: '경기', imageUrl: gyeonggi, link: '/region/경기' },
+  { name: '강원', imageUrl: gangwon, link: '/region/강원' },
+  { name: '충북', imageUrl: chungbuk, link: '/region/충북' },
+  { name: '충남', imageUrl: chungnam, link: '/region/충남' },
+  { name: '전북', imageUrl: jeonbuk, link: '/region/전북' },
+  { name: '전남', imageUrl: jeonnam, link: '/region/전남' },
+  { name: '경북', imageUrl: gyeongbuk, link: '/region/경북' },
+  { name: '경남', imageUrl: gyeongnam, link: '/region/경남' },
+  { name: '제주', imageUrl: jeju, link: '/region/제주' },
 ];
 
 const RegionSwiper = () => {
+  const navigate = useNavigate();
+
   return (
     <StyledSwiper modules={[Navigation, Pagination]} spaceBetween={30} slidesPerView={6} navigation>
       {locations.map(location => (
-        <StyledSwiperSlide key={location.name}>
+        <StyledSwiperSlide key={location.name} onClick={() => navigate(location.link)}>
           <Img src={location.imageUrl} alt={location.name} />
           <Name>{location.name}</Name>
         </StyledSwiperSlide>
