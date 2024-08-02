@@ -1,9 +1,12 @@
 import { Place, usePlaceStore } from '@/store/usePlaceStore';
 import styled from '@emotion/styled';
 import ReviewSwiper from './../layout/ReviewSwiper';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { translateType } from '../common/PlaceCardList';
+import { GoogleMapApiLoader } from 'react-google-map-wrapper';
+import { API_KEY } from '@/api/googlePlaceApi';
+import PlaceMap from '../layout/PlaceMap';
 
 const PlaceDetail = () => {
   const {
@@ -244,7 +247,13 @@ const PlaceDetail = () => {
               </svg>
               지도
             </b>
-            <div>MAP API 사용하기</div>
+            <div>
+              <Suspense fallback={'지도를 불러오는 중입니다'}>
+                <GoogleMapApiLoader apiKey={API_KEY} suspense>
+                  <PlaceMap detailPlace={detailPlace} />
+                </GoogleMapApiLoader>
+              </Suspense>
+            </div>
           </Map>
         </DetailInfoSection>
       </Section>
@@ -344,6 +353,7 @@ const Name = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  padding: 0 10px;
 
   span {
     display: inline-block;
@@ -364,6 +374,7 @@ const Name = styled.div`
 const DetailInfoSection = styled.section`
   width: 100%;
   height: auto;
+  padding: 0 10px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -486,17 +497,17 @@ const Map = styled.div`
     }
   }
 
-  div {
+  > div {
     width: 100%;
     height: 300px;
-    border: 1px solid green;
+    overflow: hidden;
   }
 `;
 
 const Review = styled.div`
   width: 100%;
   height: auto;
-  padding-top: 30px;
+  padding: 30px 10px 0 10px;
   border-top: 1px solid #56bec0;
   font-size: 15px;
 

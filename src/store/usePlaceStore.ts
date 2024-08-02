@@ -38,6 +38,10 @@ export interface Place {
   iconMaskBaseUri: string;
   id: string;
   internationalPhoneNumber: number;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
   name: string;
   nationalPhoneNumber: string;
   photo: string[];
