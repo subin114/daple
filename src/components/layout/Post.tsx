@@ -79,7 +79,7 @@ const Post = () => {
                 />
               </svg>
             </span>
-            <span>댓글 (0개)</span>
+            <span>댓글 (00개)</span>
             <span>2024.08.03</span>
           </PostInfo>
         </PostWrap>
