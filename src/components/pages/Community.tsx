@@ -40,23 +40,25 @@ const Community = () => {
 
   const handleUpload = async (content: string) => {
     if (userInfo) {
-      console.log('User Info!!!!!!!!!!!:', userInfo);
+      console.log('유저의 정보', userInfo);
       const newPost = await savePost(content, userInfo.uid, userInfo.nickname);
-      console.log('User Info!!!!!sdfsdfsdfsdf!!!!!!:', newPost);
+      console.log('유저가 작성한 포스팅 정보', newPost);
       if (newPost) {
         setPosts([newPost, ...posts]);
       }
     } else {
-      console.error('User not logged in');
+      console.error('Upload failed');
     }
   };
 
   return (
     <CommunityContainer>
       <Section>
-        <TextEditorContainer>
-          {userInfo && <TextEditor onUpload={handleUpload} />}
-        </TextEditorContainer>
+        {userInfo && (
+          <TextEditorContainer>
+            <TextEditor onUpload={handleUpload} nickname={userInfo.nickname} />
+          </TextEditorContainer>
+        )}
         <PostContainer>
           {posts.map(post => (
             <Post key={post.id} post={post} />
@@ -92,8 +94,8 @@ const TextEditorContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 40px;
-  border-radius: 20px;
-  border: 1px solid #fafafa;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #ecf6f8;
   overflow: hidden;
 `;
 
