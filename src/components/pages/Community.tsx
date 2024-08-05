@@ -1,71 +1,66 @@
 import styled from '@emotion/styled';
 import Paginate from './../layout/Paginate';
 import TextEditor from './../layout/TextEditor';
-import { Button } from '@/components/ui/button';
 import Post from '../layout/Post';
+import { useEffect, useState } from 'react';
+import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseConfig';
+import { useCurAuthStore } from '@/store/useCurAuthStore';
+import { savePost } from '@/firebase/firestoreConfig';
+
+interface PostData {
+  id: string;
+  content: string;
+  uid: string;
+  nickname: string;
+  createdAt: Date;
+}
 
 const Community = () => {
+  const [posts, setPosts] = useState<PostData[]>([]);
+  const { userInfo } = useCurAuthStore();
+
+  useEffect(() => {
+    const postsCollectionRef = collection(db, 'posts');
+    const q = query(postsCollectionRef, orderBy('createdAt', 'desc'));
+
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const postsData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        content: doc.data().content,
+        uid: doc.data().uid,
+        nickname: doc.data().nickname,
+        createdAt: doc.data().createdAt.toDate(),
+      }));
+      setPosts(postsData);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleUpload = async (content: string) => {
+    if (userInfo) {
+      console.log('User Info!!!!!!!!!!!:', userInfo);
+      const newPost = await savePost(content, userInfo.uid, userInfo.nickname);
+      console.log('User Info!!!!!sdfsdfsdfsdf!!!!!!:', newPost);
+      if (newPost) {
+        setPosts([newPost, ...posts]);
+      }
+    } else {
+      console.error('User not logged in');
+    }
+  };
+
   return (
     <CommunityContainer>
       <Section>
         <TextEditorContainer>
-          <UserInfo>
-            <ProfileImg>
-              <svg
-                viewBox="0 0 36 36"
-                fill="none"
-                role="img"
-                xmlns="http://www.w3.org/2000/svg"
-                width="80"
-                height="80"
-              >
-                <mask id=":rk:" maskUnits="userSpaceOnUse" x="0" y="0" width="36" height="36">
-                  <rect width="36" height="36" rx="72" fill="#FFFFFF"></rect>
-                </mask>
-                <g mask="url(#:rk:)">
-                  <rect width="36" height="36" fill="#817a8a"></rect>
-                  <rect
-                    x="0"
-                    y="0"
-                    width="36"
-                    height="36"
-                    transform="translate(7 7) rotate(37 18 18) scale(1.1)"
-                    fill="#fcddc8"
-                    rx="6"
-                  ></rect>
-                  <g transform="translate(3.5 3.5) rotate(-7 18 18)">
-                    <path d="M13,20 a1,0.75 0 0,0 10,0" fill="#000000"></path>
-                    <rect
-                      x="12"
-                      y="14"
-                      width="1.5"
-                      height="2"
-                      rx="1"
-                      stroke="none"
-                      fill="#000000"
-                    ></rect>
-                    <rect
-                      x="22"
-                      y="14"
-                      width="1.5"
-                      height="2"
-                      rx="1"
-                      stroke="none"
-                      fill="#000000"
-                    ></rect>
-                  </g>
-                </g>
-              </svg>
-            </ProfileImg>
-            <Nickname>닉네임</Nickname>
-          </UserInfo>
-          <TextEditorWrap>
-            <TextEditor />
-            <UploadBtn>업로드하기</UploadBtn>
-          </TextEditorWrap>
+          {userInfo && <TextEditor onUpload={handleUpload} />}
         </TextEditorContainer>
         <PostContainer>
-          <Post />
+          {posts.map(post => (
+            <Post key={post.id} post={post} />
+          ))}
         </PostContainer>
         <Paginate />
       </Section>
@@ -102,17 +97,6 @@ const TextEditorContainer = styled.div`
   overflow: hidden;
 `;
 
-const UserInfo = styled.div`
-  width: 100%;
-  height: auto;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 15px 20px;
-  background-color: #ecf6f8;
-  border-radius: 20px 20px 0px 0px;
-`;
-
 export const ProfileImg = styled.div`
   width: 32px;
   height: 32px;
@@ -128,24 +112,6 @@ export const ProfileImg = styled.div`
 
 export const Nickname = styled.span`
   font-size: 14px;
-`;
-
-const TextEditorWrap = styled.div`
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  background-color: #f8f8f8;
-`;
-
-const UploadBtn = styled(Button)`
-  margin-left: auto;
-  margin-top: 15px;
-  background-color: #56bec0;
-  color: #fff;
-
-  &:hover {
-    background-color: #42abad;
-  }
 `;
 
 const PostContainer = styled.div`

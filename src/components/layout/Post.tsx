@@ -1,7 +1,18 @@
 import styled from '@emotion/styled';
 import { Nickname, ProfileImg } from '../pages/Community';
 
-const Post = () => {
+interface PostProps {
+  post: {
+    id: string;
+    content: string;
+    uid: string;
+    nickname: string;
+    createdAt: Date;
+    // commentCount: number;
+  };
+}
+
+const Post = ({ post }: PostProps) => {
   return (
     <>
       <Board>
@@ -53,14 +64,10 @@ const Post = () => {
               </g>
             </svg>
           </ProfileImg>
-          <Nickname>닉네임</Nickname>
+          <Nickname>{post.nickname}</Nickname>
         </BoardUserInfo>
         <PostWrap>
-          <PostContent>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur, voluptate eius.
-            Exercitationem atque, soluta fugit enim consequuntur recusandae quidem doloribus maxime
-            impedit natus doloremque nihil totam maiores dolore, vero corporis.
-          </PostContent>
+          <PostContent>{post.content}</PostContent>
           <PostInfo>
             <span>
               좋아요
@@ -80,7 +87,7 @@ const Post = () => {
               </svg>
             </span>
             <span>댓글 (00개)</span>
-            <span>2024.08.03</span>
+            <span>{post.createdAt.toDateString()}</span>
           </PostInfo>
         </PostWrap>
       </Board>

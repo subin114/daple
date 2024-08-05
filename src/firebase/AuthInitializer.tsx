@@ -18,7 +18,15 @@ const AuthInitializer = () => {
           const userInfo = await getUserInfo(user.uid);
           console.log('User info fetched:', userInfo); // 디버깅용
 
-          setUserInfo(userInfo ?? null);
+          if (userInfo) {
+            setUserInfo({
+              uid: user.uid,
+              email: userInfo.email,
+              nickname: userInfo.nickname,
+            });
+          } else {
+            setUserInfo(null);
+          }
         } catch (err) {
           console.error('Error fetching user info: ', err);
           setUserInfo(null);
