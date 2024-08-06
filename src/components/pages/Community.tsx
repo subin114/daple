@@ -16,9 +16,12 @@ interface PostData {
   createdAt: Date;
 }
 
+const POSTS_PER_PAGE = 5;
+
 const Community = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
   const { userInfo } = useCurAuthStore();
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const postsCollectionRef = collection(db, 'posts');
@@ -51,6 +54,18 @@ const Community = () => {
     }
   };
 
+  /** 페이지네이션 */
+  const totalPosts = posts.length; // 전체 포스팅 갯수
+  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE); // 전체 페이지 갯수
+  const paginatedPosts = posts.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE,
+  ); // 현재 페이지에 해당하는 포스팅 추출
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <CommunityContainer>
       <Section>
@@ -60,11 +75,15 @@ const Community = () => {
           </TextEditorContainer>
         )}
         <PostContainer>
-          {posts.map(post => (
+          {paginatedPosts.map(post => (
             <Post key={post.id} post={post} />
           ))}
         </PostContainer>
-        <Paginate />
+        <Paginate
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </Section>
     </CommunityContainer>
   );
