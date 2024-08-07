@@ -8,7 +8,7 @@ import { db } from '@/firebase/firebaseConfig';
 import { useCurAuthStore } from '@/store/useCurAuthStore';
 import { savePost } from '@/firebase/firestoreConfig';
 
-interface PostData {
+export interface PostData {
   id: string;
   content: string;
   uid: string;
@@ -135,7 +135,7 @@ export const Nickname = styled.span`
   font-size: 14px;
 `;
 
-const PostContainer = styled.div`
+export const PostContainer = styled.div`
   width: 100%;
   height: auto;
 `;

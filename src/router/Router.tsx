@@ -10,6 +10,7 @@ import Login from '../components/pages/Login';
 import SignUp from '../components/pages/SignUp';
 import Footer from '../components/layout/Footer';
 import PlaceDetail from '@/components/pages/PlaceDetail';
+import CommunityDetail from '@/components/pages/CommunityDetail';
 
 const Router = () => {
   const location = useLocation();
@@ -24,6 +25,7 @@ const Router = () => {
         <Route path="/region/:locationName" element={<Region />} />
         <Route path="/region/detail/:id" element={<PlaceDetail />} />
         <Route path="/community" element={<Community />} />
+        <Route path="/community/detail/:id" element={<CommunityDetail />} />
         <Route path="/bookmark" element={<BookMark />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/login" element={<Login />} />

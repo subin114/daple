@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { ProfileImg } from '../pages/Community';
 import DOMPurify from 'dompurify';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 interface PostProps {
   post: {
@@ -16,9 +17,10 @@ interface PostProps {
 const Post = ({ post }: PostProps) => {
   const sanitizedContent = DOMPurify.sanitize(post.content);
   const formattedDate = dayjs(post.createdAt).format('YYYY/MM/DD · HH:mm');
+  const navigate = useNavigate();
 
   return (
-    <Board>
+    <Board onClick={() => navigate(`/community/detail/${post.id}`)}>
       <BoardUserInfo>
         <ProfileImg>
           <svg
