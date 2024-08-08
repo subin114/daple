@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useCurAuthStore } from '../../store/useCurAuthStore';
 import { memo, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
 
 interface MenuProps {
   active?: boolean;
@@ -98,51 +99,7 @@ const Nav = () => {
         {isAuthenticated ? (
           <UserInfo>
             {/* <img src="https://source.boringavatars.com/beam/40" /> */}
-            <svg
-              viewBox="0 0 36 36"
-              fill="none"
-              role="img"
-              xmlns="http://www.w3.org/2000/svg"
-              width="80"
-              height="80"
-            >
-              <mask id=":r1l:" maskUnits="userSpaceOnUse" x="0" y="0" width="36" height="36">
-                <rect width="36" height="36" rx="72" fill="#FFFFFF"></rect>
-              </mask>
-              <g mask="url(#:r1l:)">
-                <rect width="36" height="36" fill="#cee891"></rect>
-                <rect
-                  x="0"
-                  y="0"
-                  width="36"
-                  height="36"
-                  transform="translate(-5 9) rotate(229 18 18) scale(1.1)"
-                  fill="#50c8c6"
-                  rx="36"
-                ></rect>
-                <g transform="translate(-5 4.5) rotate(9 18 18)">
-                  <path d="M13,20 a1,0.75 0 0,0 10,0" fill="#000000"></path>
-                  <rect
-                    x="10"
-                    y="14"
-                    width="1.5"
-                    height="2"
-                    rx="1"
-                    stroke="none"
-                    fill="#000000"
-                  ></rect>
-                  <rect
-                    x="24"
-                    y="14"
-                    width="1.5"
-                    height="2"
-                    rx="1"
-                    stroke="none"
-                    fill="#000000"
-                  ></rect>
-                </g>
-              </g>
-            </svg>
+            <AvatarsSvg />
             <UserName>{userInfo?.nickname}</UserName>
           </UserInfo>
         ) : null}
@@ -209,14 +166,6 @@ const Menu = styled.li<MenuProps>`
   &:hover {
     color: #56bec0;
   }
-`;
-
-const SkeletonMenu = styled(Skeleton)`
-  margin-right: 25px;
-  padding: 0 10px;
-  font-size: 14px;
-  height: 100%;
-  width: 100%;
 `;
 
 const NavRight = styled.ul`
