@@ -106,7 +106,8 @@ const Post = ({ post, isDetail }: PostProps) => {
             {post.likes || 0}
           </button>
           <button>
-            <CommentsIcon />0
+            <CommentsIcon />
+            {post.commentsCount || 0}
           </button>
           <button>
             <ViewIcon />

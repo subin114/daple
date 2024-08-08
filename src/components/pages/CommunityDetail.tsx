@@ -81,7 +81,6 @@ const CommunityDetail = () => {
     try {
       const commentData = await addComment(id, newComment, userInfo.uid, userInfo.nickname);
       console.log('새 댓글 정보', commentData);
-
       setNewComment('');
     } catch (err) {
       console.error('디테일 페이지 댓글 저장 실패', err);
@@ -91,7 +90,9 @@ const CommunityDetail = () => {
   return (
     <CommunityDetailContainer>
       <Section>
-        <PostContainer>{post && <Post post={post} isDetail={true} />}</PostContainer>
+        <PostContainer>
+          {post && <Post post={{ ...post, commentsCount: comment.length }} isDetail={true} />}
+        </PostContainer>
         <CommentContainer>
           {comment.map(c => (
             <CommentWrap key={c.id}>
