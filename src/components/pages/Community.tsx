@@ -7,6 +7,7 @@ import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseConfig';
 import { useCurAuthStore } from '@/store/useCurAuthStore';
 import { addPost } from '@/firebase/firestore/addPost';
+import CommunitySearch from '../layout/CommunitySearch';
 
 export interface PostData {
   id: string;
@@ -80,6 +81,7 @@ const Community = () => {
             <TextEditor onUpload={handleUpload} nickname={userInfo.nickname} />
           </TextEditorContainer>
         )}
+        <CommunitySearch />
         <PostContainer>
           {paginatedPosts.map(post => (
             <Post key={post.id} post={post} isDetail={false} />
@@ -119,7 +121,7 @@ const TextEditorContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 40px;
-  padding-bottom: 20px;
+  padding-bottom: 40px;
   border-bottom: 2px solid #ecf6f8;
   overflow: hidden;
 `;
