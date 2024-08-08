@@ -93,21 +93,27 @@ const CommunityDetail = () => {
         <PostContainer>
           {post && <Post post={{ ...post, commentsCount: comment.length }} isDetail={true} />}
         </PostContainer>
-        <CommentContainer>
-          {comment.map(c => (
-            <CommentWrap key={c.id}>
-              <CommentUserInfo>
-                <ProfileImg>
-                  <AvatarsSvg />
-                </ProfileImg>
-                <Nickname>
-                  {c.nickname} <span>{dayjs(c.createdAt).format('YYYY/MM/DD · HH:mm')}</span>
-                </Nickname>
-              </CommentUserInfo>
-              <Comment>{c.content}</Comment>
-            </CommentWrap>
-          ))}
-        </CommentContainer>
+        <CommentBox>
+          {comment.length > 0 ? (
+            <CommentContainer>
+              {comment.map(c => (
+                <CommentWrap key={c.id}>
+                  <CommentUserInfo>
+                    <ProfileImg>
+                      <AvatarsSvg />
+                    </ProfileImg>
+                    <Nickname>
+                      {c.nickname} <span>{dayjs(c.createdAt).format('YYYY/MM/DD · HH:mm')}</span>
+                    </Nickname>
+                  </CommentUserInfo>
+                  <Comment>{c.content}</Comment>
+                </CommentWrap>
+              ))}
+            </CommentContainer>
+          ) : (
+            <NoCommentContainer>아직 작성된 댓글이 없어요</NoCommentContainer>
+          )}
+        </CommentBox>
         <EditorContainer>
           <CommentMyInfo>
             <ProfileImg>
@@ -148,9 +154,28 @@ const Section = styled.section`
   align-items: center;
 `;
 
+const CommentBox = styled.div`
+  width: 100%;
+  height: auto;
+  min-height: 200px;
+`;
+
 const CommentContainer = styled.div`
   width: 100%;
   height: auto;
+  border-radius: 20px;
+  overflow: hidden;
+`;
+
+const NoCommentContainer = styled.div`
+  width: 100%;
+  height: 200px;
+  font-size: 15px;
+  color: #ccc;
+  background-color: #f8f8f8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 20px;
   overflow: hidden;
 `;
