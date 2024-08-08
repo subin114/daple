@@ -82,7 +82,7 @@ const Community = () => {
         )}
         <PostContainer>
           {paginatedPosts.map(post => (
-            <Post key={post.id} post={post} />
+            <Post key={post.id} post={post} isDetail={false} />
           ))}
         </PostContainer>
         <Paginate

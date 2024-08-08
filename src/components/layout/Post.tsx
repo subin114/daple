@@ -23,9 +23,10 @@ interface PostProps {
     commentsCount: number;
     views: number;
   };
+  isDetail: boolean;
 }
 
-const Post = ({ post }: PostProps) => {
+const Post = ({ post, isDetail }: PostProps) => {
   const sanitizedContent = DOMPurify.sanitize(post.content);
   const formattedDate = dayjs(post.createdAt).format('YYYY/MM/DD · HH:mm');
   const navigate = useNavigate();
@@ -65,20 +66,28 @@ const Post = ({ post }: PostProps) => {
 
   /** 조회수 핸들러 */
   const handleView = async () => {
-    try {
-      await updateView(post.id);
-    } catch (err) {
-      console.error('Error updating views:', err);
+    if (!isDetail) {
+      // 디테일 페이지가 아닐 때만 조회수 증가
+      try {
+        await updateView(post.id);
+      } catch (err) {
+        console.error('Error updating views:', err);
+      }
     }
+  };
+
+  const handleNavigation = async () => {
+    if (!isDetail) {
+      await handleView();
+    }
+    navigate(`/community/detail/${post.id}`);
   };
 
   return (
     <Board>
       <BoardUserInfo
-        onClick={() => {
-          handleView();
-          navigate(`/community/detail/${post.id}`);
-        }}
+        onClick={isDetail ? undefined : handleNavigation}
+        style={{ cursor: isDetail ? 'default' : 'pointer' }}
       >
         <ProfileImg>
           <AvatarsSvg />
@@ -88,22 +97,20 @@ const Post = ({ post }: PostProps) => {
       <PostWrap>
         <PostContent
           dangerouslySetInnerHTML={{ __html: sanitizedContent }}
-          onClick={() => {
-            handleView();
-            navigate(`/community/detail/${post.id}`);
-          }}
+          onClick={isDetail ? undefined : handleNavigation}
+          style={{ cursor: isDetail ? 'default' : 'pointer' }}
         />
         <PostInfo>
           <button onClick={handleLike}>
             <LikeIcon isLiked={isLiked} />
-            {post.likes}
+            {post.likes || 0}
           </button>
           <button>
             <CommentsIcon />0
           </button>
           <button>
             <ViewIcon />
-            {post.views}
+            {post.views || 0}
           </button>
           <span>{formattedDate}</span>
         </PostInfo>
