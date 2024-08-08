@@ -8,6 +8,7 @@ import { db } from '@/firebase/firebaseConfig';
 import { useCurAuthStore } from '@/store/useCurAuthStore';
 import { addPost } from '@/firebase/firestore/addPost';
 import CommunitySearch from '../layout/CommunitySearch';
+import { NoCommentContainer } from './CommunityDetail';
 
 export interface PostData {
   id: string;
@@ -26,6 +27,8 @@ const Community = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
   const { userInfo } = useCurAuthStore();
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredPosts, setFilteredPosts] = useState<PostData[]>([]);
 
   useEffect(() => {
     const postsCollectionRef = collection(db, 'posts');
@@ -48,6 +51,17 @@ const Community = () => {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    if (searchTerm) {
+      const filtered = posts.filter(post =>
+        post.content.toLowerCase().includes(searchTerm.toLocaleLowerCase()),
+      );
+      setFilteredPosts(filtered);
+    } else {
+      setFilteredPosts(posts);
+    }
+  }, [searchTerm, posts]);
+
   const handleUpload = async (content: string) => {
     if (userInfo) {
       console.log('유저의 정보', userInfo);
@@ -62,15 +76,19 @@ const Community = () => {
   };
 
   /** 페이지네이션 */
-  const totalPosts = posts.length; // 전체 포스팅 갯수
+  const totalPosts = filteredPosts.length; // 전체 포스팅 갯수
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE); // 전체 페이지 갯수
-  const paginatedPosts = posts.slice(
+  const paginatedPosts = filteredPosts.slice(
     (currentPage - 1) * POSTS_PER_PAGE,
     currentPage * POSTS_PER_PAGE,
   ); // 현재 페이지에 해당하는 포스팅 추출
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+
+  const handleSearch = (searchTerm: string) => {
+    setSearchTerm(searchTerm);
   };
 
   return (
@@ -81,11 +99,14 @@ const Community = () => {
             <TextEditor onUpload={handleUpload} nickname={userInfo.nickname} />
           </TextEditorContainer>
         )}
-        <CommunitySearch />
+        <CommunitySearch onSearch={handleSearch} />
+
         <PostContainer>
-          {paginatedPosts.map(post => (
-            <Post key={post.id} post={post} isDetail={false} />
-          ))}
+          {paginatedPosts.length > 0 ? (
+            paginatedPosts.map(post => <Post key={post.id} post={post} isDetail={false} />)
+          ) : (
+            <NoCommentContainer>아직 작성된 댓글이 없어요</NoCommentContainer>
+          )}
         </PostContainer>
         <Paginate
           currentPage={currentPage}
@@ -120,8 +141,8 @@ const TextEditorContainer = styled.div`
   height: auto;
   display: flex;
   flex-direction: column;
-  margin-bottom: 40px;
-  padding-bottom: 40px;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
   border-bottom: 2px solid #ecf6f8;
   overflow: hidden;
 `;
@@ -131,7 +152,8 @@ export const ProfileImg = styled.div`
   height: 32px;
   margin-right: 8px;
   border-radius: 20px;
-  background-color: #fff;
+  border: 2px solid #fff;
+  overflow: hidden;
 
   svg {
     width: 100%;
@@ -146,6 +168,7 @@ export const Nickname = styled.span`
 export const PostContainer = styled.div`
   width: 100%;
   height: auto;
+  margin-bottom: 20px;
 `;
 
 export default Community;

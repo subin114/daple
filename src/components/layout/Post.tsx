@@ -123,7 +123,7 @@ const Post = ({ post, isDetail }: PostProps) => {
 const Board = styled.div`
   width: 100%;
   height: auto;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   border-radius: 20px;
   background-color: #f8f8f8;
   overflow: hidden;

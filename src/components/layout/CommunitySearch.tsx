@@ -1,13 +1,30 @@
 import styled from '@emotion/styled';
 import { Input } from '@/components/ui/input';
+import { useState } from 'react';
 
-const CommunitySearch = () => {
+interface CommunitySearchProps {
+  onSearch: (searchTerm: string) => void;
+}
+
+const CommunitySearch = ({ onSearch }: CommunitySearchProps) => {
+  const [inputValue, setInputValue] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    onSearch(value);
+  };
+
   return (
     <SearchContainer>
       <Text>
         검색하고 싶은 <span>게시글의 내용</span>을 입력하세요!
       </Text>
-      <StyledInput placeholder="ex. 성대역 조용한 술집 추천" />
+      <StyledInput
+        value={inputValue}
+        onChange={handleChange}
+        placeholder="ex. 성대역 조용한 술집 추천"
+      />
     </SearchContainer>
   );
 };
@@ -18,8 +35,8 @@ const SearchContainer = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 40px;
-  padding: 30px 0;
+  margin-bottom: 30px;
+  padding: 40px 0;
   border-radius: 20px;
   background: #ecf6f8;
 `;

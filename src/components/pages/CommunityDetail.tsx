@@ -121,7 +121,6 @@ const CommunityDetail = () => {
             </ProfileImg>
             <Nickname>{userInfo?.nickname}</Nickname>
           </CommentMyInfo>
-
           <CommentSection>
             <TextareaStyled
               value={newComment}
@@ -147,7 +146,6 @@ const CommunityDetailContainer = styled.div`
 const Section = styled.section`
   width: 100%;
   height: auto;
-  margin-top: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -167,17 +165,16 @@ const CommentContainer = styled.div`
   overflow: hidden;
 `;
 
-const NoCommentContainer = styled.div`
+export const NoCommentContainer = styled.div`
   width: 100%;
   height: 200px;
-  font-size: 15px;
-  color: #ccc;
-  background-color: #f8f8f8;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  overflow: hidden;
+  font-size: 15px;
+  color: #ccc;
+  background-color: #f8f8f8;
 `;
 
 const CommentWrap = styled.div`
@@ -223,7 +220,7 @@ const Comment = styled.div`
 const EditorContainer = styled.div`
   width: 100%;
   height: auto;
-  margin-top: 50px;
+  margin-top: 45px;
   border-radius: 20px;
   overflow: hidden;
 `;

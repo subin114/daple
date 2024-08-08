@@ -123,7 +123,8 @@ export const ProfileImg = styled.div`
   height: 32px;
   margin-right: 8px;
   border-radius: 20px;
-  background-color: #fff;
+  border: 2px solid #fff;
+  overflow: hidden;
 
   svg {
     width: 100%;
