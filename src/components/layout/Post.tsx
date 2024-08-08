@@ -3,6 +3,9 @@ import { ProfileImg } from '../pages/Community';
 import DOMPurify from 'dompurify';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import { useCurAuthStore } from '@/store/useCurAuthStore';
+import { addLike, checkUserLiked, removeLike } from '@/firebase/firestore/updateLike';
+import { updateView } from '@/firebase/firestore/updateView';
 
 interface PostProps {
   post: {
@@ -11,6 +14,9 @@ interface PostProps {
     uid: string;
     nickname: string;
     createdAt: Date;
+    likes: number;
+    commentsCount: number;
+    views: number;
   };
 }
 
@@ -18,6 +24,35 @@ const Post = ({ post }: PostProps) => {
   const sanitizedContent = DOMPurify.sanitize(post.content);
   const formattedDate = dayjs(post.createdAt).format('YYYY/MM/DD · HH:mm');
   const navigate = useNavigate();
+  const { userInfo } = useCurAuthStore();
+
+  /** 좋아요 핸들러 */
+  const handleLike = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!userInfo) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+    try {
+      const liked = await checkUserLiked(post.id, userInfo.uid);
+      if (liked) {
+        await removeLike(post.id, userInfo.uid);
+      } else {
+        await addLike(post.id, userInfo.uid);
+      }
+    } catch (err) {
+      console.error('Error updating likes:', err);
+    }
+  };
+
+  /** 조회수 핸들러 */
+  const handleView = async () => {
+    try {
+      await updateView(post.id);
+    } catch (err) {
+      console.error('Error updating views:', err);
+    }
+  };
 
   return (
     <Board onClick={() => navigate(`/community/detail/${post.id}`)}>
@@ -74,7 +109,7 @@ const Post = ({ post }: PostProps) => {
       <PostWrap>
         <PostContent dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
         <PostInfo>
-          <span>
+          <button onClick={handleLike}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -89,9 +124,9 @@ const Post = ({ post }: PostProps) => {
                 d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
               />
             </svg>
-            0
-          </span>
-          <span>
+            {post.likes}
+          </button>
+          <button>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -107,8 +142,8 @@ const Post = ({ post }: PostProps) => {
               />
             </svg>
             0
-          </span>
-          <span>
+          </button>
+          <button onClick={handleView}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -128,8 +163,8 @@ const Post = ({ post }: PostProps) => {
                 d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
               />
             </svg>
-            0
-          </span>
+            {post.views}
+          </button>
           <span>{formattedDate}</span>
         </PostInfo>
       </PostWrap>
@@ -187,14 +222,13 @@ const PostInfo = styled.div`
   font-size: 13px;
   background-color: #efefef;
 
-  span:nth-of-type(1),
-  span:nth-of-type(2),
-  span:nth-of-type(3) {
-    margin-right: 40px;
+  button {
+    width: 40px;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    margin-right: 25px;
     cursor: pointer;
 
     svg {
@@ -204,7 +238,7 @@ const PostInfo = styled.div`
     }
   }
 
-  span:nth-of-type(4) {
+  span {
     margin-left: auto;
   }
 `;

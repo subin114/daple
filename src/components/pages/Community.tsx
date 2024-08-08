@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseConfig';
 import { useCurAuthStore } from '@/store/useCurAuthStore';
-import { savePost } from '@/firebase/firestoreConfig';
+import { addPost } from '@/firebase/firestore/addPost';
 
 export interface PostData {
   id: string;
@@ -14,6 +14,9 @@ export interface PostData {
   uid: string;
   nickname: string;
   createdAt: Date;
+  likes: number;
+  commentsCount: number;
+  views: number;
 }
 
 const POSTS_PER_PAGE = 5;
@@ -34,6 +37,9 @@ const Community = () => {
         uid: doc.data().uid,
         nickname: doc.data().nickname,
         createdAt: doc.data().createdAt.toDate(),
+        likes: doc.data().likes,
+        commentsCount: doc.data().commentsCount,
+        views: doc.data().views,
       }));
       setPosts(postsData);
     });
@@ -44,7 +50,7 @@ const Community = () => {
   const handleUpload = async (content: string) => {
     if (userInfo) {
       console.log('유저의 정보', userInfo);
-      const newPost = await savePost(content, userInfo.uid, userInfo.nickname);
+      const newPost = await addPost(content, userInfo.uid, userInfo.nickname);
       console.log('유저가 작성한 포스팅 정보', newPost);
       if (newPost) {
         setPosts([newPost, ...posts]);

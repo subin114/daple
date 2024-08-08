@@ -2,14 +2,14 @@ import styled from '@emotion/styled';
 import { PostContainer, PostData, ProfileImg } from './Community';
 import Post from '../layout/Post';
 import { useEffect, useState } from 'react';
-import { collection, doc, getDoc, onSnapshot, orderBy, query } from 'firebase/firestore';
+import { collection, doc, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseConfig';
 import { useParams } from 'react-router-dom';
-import { saveComment } from '@/firebase/firestoreConfig';
 import { useCurAuthStore } from '@/store/useCurAuthStore';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import dayjs from 'dayjs';
+import { addComment } from '@/firebase/firestore/addComment';
 
 interface CommentData {
   id: string;
@@ -17,6 +17,9 @@ interface CommentData {
   uid: string;
   nickname: string;
   createdAt: Date;
+  likes: number;
+  commentsCount: number;
+  views: number;
 }
 
 const CommunityDetail = () => {
@@ -29,12 +32,11 @@ const CommunityDetail = () => {
   useEffect(() => {
     if (!id) return;
 
-    /** 포스팅 조회 */
-    const fetchPost = async () => {
-      try {
-        const docRef = doc(db, 'posts', id);
-        const docSnap = await getDoc(docRef);
+    /** 포스팅 실시간 조회 */
+    const fetchPost = () => {
+      const docRef = doc(db, 'posts', id);
 
+      const unsubscribe = onSnapshot(docRef, docSnap => {
         if (docSnap.exists()) {
           const postData = {
             id: docSnap.id,
@@ -44,11 +46,11 @@ const CommunityDetail = () => {
           setPost(postData);
         } else {
           console.log('No such document!');
-          return null;
+          setPost(null);
         }
-      } catch (err) {
-        console.error('Error fetching post: ', err);
-      }
+      });
+
+      return () => unsubscribe();
     };
 
     /** 댓글 실시간 조회 */
@@ -76,7 +78,7 @@ const CommunityDetail = () => {
     if (newComment.trim() === '' || !userInfo || !post || !id) return;
 
     try {
-      const commentData = await saveComment(id, newComment, userInfo.uid, userInfo.nickname);
+      const commentData = await addComment(id, newComment, userInfo.uid, userInfo.nickname);
       console.log('새 댓글 정보', commentData);
 
       setNewComment('');
