@@ -61,7 +61,6 @@ const SignUp = () => {
       navigate('/login');
     } catch (err) {
       console.error('Error creating account: ', err);
-
       const firebaseError = (err as FirebaseCustomError).code;
 
       switch (firebaseError) {
@@ -85,6 +84,7 @@ const SignUp = () => {
     } finally {
       setEmail('');
       setPassword('');
+      setNickname('');
     }
   };
 

@@ -9,8 +9,17 @@ export const signUp = async (email: string, password: string, nickname: string) 
     const userCredential = await createUserWithEmailAndPassword(authService, email, password);
     const user = userCredential.user;
 
-    await saveUserToFirestore(user.uid, email, nickname);
-    await authService.signOut();
+    return new Promise<void>(resolve => {
+      saveUserToFirestore(user.uid, email, nickname);
+      authService.signOut();
+
+      const unsubscribe = authService.onAuthStateChanged(user => {
+        if (!user) {
+          unsubscribe();
+          resolve();
+        }
+      });
+    });
   } catch (err) {
     console.error('Error signing up: ', err);
     throw err;

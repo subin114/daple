@@ -81,7 +81,7 @@ const Nav = () => {
             마이페이지
           </Option>
           <Line />
-          {isAuthenticated ? (
+          {isAuthenticated && userInfo ? (
             <Option onClick={logout}>로그아웃</Option>
           ) : (
             <Option onClick={() => navigate('/login')} active={isActive('/login')}>
@@ -89,7 +89,7 @@ const Nav = () => {
             </Option>
           )}
         </NavRight>
-        {isAuthenticated ? (
+        {isAuthenticated && userInfo ? (
           <UserInfo>
             {/* {isLoading ? (
               <Skeleton className="h-4 w-[50px]" />
