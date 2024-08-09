@@ -18,9 +18,8 @@ const Nav = () => {
 
   const { isAuthenticated, userInfo, isLoading, setLoading, logout } = useCurAuthStore();
 
-  // console.log('UserInfo in Nav:', userInfo); // 디버깅용
-
   useEffect(() => {
+    console.log('디버깅:', userInfo); // 디버깅용
     setLoading(true);
 
     const timer = setTimeout(() => {
@@ -49,12 +48,6 @@ const Nav = () => {
             <Skeleton className="h-4 w-[90px] mr-2" />
             <Skeleton className="h-4 w-[60px]" />
           </NavRight>
-          {isAuthenticated ? (
-            <UserInfo>
-              <Skeleton className="h-[24px] w-[24px] rounded-full mr-2" />
-              <Skeleton className="h-4 w-[50px]" />
-            </UserInfo>
-          ) : null}
         </Container>
       </Header>
     );
@@ -98,6 +91,13 @@ const Nav = () => {
         </NavRight>
         {isAuthenticated ? (
           <UserInfo>
+            {/* {isLoading ? (
+              <Skeleton className="h-4 w-[50px]" />
+            ) : (
+              <>
+                <AvatarsSvg /> <UserName>{userInfo?.nickname}</UserName>
+              </>
+            )} */}
             {/* <img src="https://source.boringavatars.com/beam/40" /> */}
             <AvatarsSvg />
             <UserName>{userInfo?.nickname}</UserName>

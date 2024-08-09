@@ -22,7 +22,6 @@ export const signIn = async (email: string, password: string) => {
     const userCredential = await signInWithEmailAndPassword(authService, email, password);
     const user = userCredential.user;
 
-    // Firestore에서 사용자 정보 가져오기
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     if (!userDoc.exists()) {
       throw new Error('No such user!');
