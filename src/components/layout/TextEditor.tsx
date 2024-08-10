@@ -21,7 +21,7 @@ const TextEditor = ({ onUpload, nickname }: TextEditorProps) => {
 
   const handleUpload = () => {
     if (editor.current) {
-      const content = editor.current.getText().trim();
+      const content = editor.current.getContents(false).trim();
 
       if (content.length === 0) {
         alert('내용을 입력하세요!');
