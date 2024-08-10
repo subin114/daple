@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { Box, Image } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { usePlaceStore } from '@/store/usePlaceStore';
+import BookmarkIcon from '@/assets/icons/BookmarkIcon';
 
 interface CardProps {
   id: string;
@@ -31,7 +32,10 @@ const PlaceCard = ({ id, imageUrl, category, title, address, sourcePage }: CardP
         <Image src={imageUrl} alt={title} />
       </ImageBox>
       <Box p="4">
-        <Category>{category}</Category>
+        <BoxTop>
+          <Category>{category}</Category>
+          <BookmarkIcon />
+        </BoxTop>
         <Title>{title}</Title>
         <Address>{address}</Address>
       </Box>
@@ -73,6 +77,20 @@ const Category = styled.div`
   font-size: 13px;
   border-radius: 15px;
   background: #f1f5f9;
+`;
+
+const BoxTop = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  svg {
+    width: 17px;
+    height: 17px;
+    color: #ccc;
+    cursor: pointer;
+  }
 `;
 
 const Title = styled.div`

@@ -4,6 +4,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 import styled from '@emotion/styled';
+import ReviewProfileIcon from '@/assets/icons/ReviewProfileIcon';
+import RatingIcon from '@/assets/icons/RatingIcon';
 
 interface ReviewSwiperProps {
   reviews?: {
@@ -56,34 +58,11 @@ const ReviewSwiper = ({ reviews }: ReviewSwiperProps) => {
       {reviews?.map((review, idx) => (
         <StyledSwiperSlide key={idx}>
           <Nickname>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="size-5"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5.5-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 12a5.99 5.99 0 0 0-4.793 2.39A6.483 6.483 0 0 0 10 16.5a6.483 6.483 0 0 0 4.793-2.11A5.99 5.99 0 0 0 10 12Z"
-                clipRule="evenodd"
-              />
-            </svg>
-
+            <ReviewProfileIcon />
             {review.authorAttribution.displayName}
           </Nickname>
           <Rating>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="size-5"
-            >
-              <path
-                fillRule="evenodd"
-                d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401Z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <RatingIcon />
             {review.rating}
           </Rating>
           {review.text?.text ? (

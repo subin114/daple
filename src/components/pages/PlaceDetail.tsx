@@ -7,6 +7,12 @@ import { translateType } from '../common/PlaceCardList';
 import { GoogleMapApiLoader } from 'react-google-map-wrapper';
 import { API_KEY } from '@/api/googlePlaceApi';
 import PlaceMap from '../layout/PlaceMap';
+import AddressIcon from '@/assets/icons/AddressIcon';
+import OpeningHours from '@/assets/icons/OpeningHours';
+import PhoneNumber from '@/assets/icons/PhoneNumber';
+import WebsiteIcon from '@/assets/icons/WebsiteIcon';
+import { MapIcon } from 'lucide-react';
+import ReviewIcon from '@/assets/icons/ReviewIcon';
 
 const PlaceDetail = () => {
   const {
@@ -124,25 +130,7 @@ const PlaceDetail = () => {
           <DetailInfo>
             <Address>
               <b>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"
-                  />
-                </svg>
+                <AddressIcon />
                 주소
               </b>
               {detailPlace.formattedAddress ? (
@@ -153,20 +141,7 @@ const PlaceDetail = () => {
             </Address>
             <Opening>
               <b>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
+                <OpeningHours />
                 영업시간 ({detailPlace.currentOpeningHours?.openNow ? '영업 중' : '영업 종료'})
               </b>
 
@@ -180,20 +155,7 @@ const PlaceDetail = () => {
             </Opening>
             <Call>
               <b>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"
-                  />
-                </svg>
+                <PhoneNumber />
                 전화번호
               </b>
               {detailPlace.nationalPhoneNumber ? (
@@ -204,20 +166,7 @@ const PlaceDetail = () => {
             </Call>
             <Website>
               <b>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="size-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-                  />
-                </svg>
+                <WebsiteIcon />
                 웹사이트
               </b>
               {detailPlace.websiteUri ? (
@@ -231,20 +180,7 @@ const PlaceDetail = () => {
           </DetailInfo>
           <Map>
             <b>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"
-                />
-              </svg>
+              <MapIcon />
               지도
             </b>
             <div>
@@ -260,15 +196,7 @@ const PlaceDetail = () => {
       <Section>
         <Review>
           <b>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="size-5"
-            >
-              <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
-              <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
-            </svg>
+            <ReviewIcon />
             리뷰 (총 {detailPlace.reviews?.length || 0}개)
           </b>
           {detailPlace.reviews ? (
