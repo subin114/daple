@@ -4,6 +4,7 @@ import PlaceCardList from '../common/PlaceCardList';
 import { Place, usePlaceStore } from '@/store/usePlaceStore';
 import { PLACE_TYPES } from '@/utils/placeTypeMappings';
 import { useEffect } from 'react';
+import { NoPlacesMessage } from '../pages/BookMark';
 
 interface TabData {
   value: string;
@@ -127,7 +128,5 @@ const StyledTabsList = styled(TabsList)`
     padding: 6px 14px;
   }
 `;
-
-const NoPlacesMessage = styled.div``;
 
 export default Tabs;

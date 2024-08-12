@@ -90,6 +90,8 @@ interface PlaceStore {
   setPlaces: (places: Place[]) => void;
   regionsPlaces: Place[];
   setRegionsPlaces: (places: Place[]) => void;
+  bookmarkPlaces: Place[];
+  setBookmarkPlaces: (places: Place[]) => void;
   loading: boolean;
   setLoading: (loading: boolean) => void;
   error: string | null;
@@ -103,6 +105,8 @@ export const usePlaceStore = create<PlaceStore>(set => ({
   setPlaces: (places: Place[]) => set({ places }),
   regionsPlaces: [],
   setRegionsPlaces: (regionsPlaces: Place[]) => set({ regionsPlaces }),
+  bookmarkPlaces: [],
+  setBookmarkPlaces: (bookmarkPlaces: Place[]) => set({ bookmarkPlaces }),
   loading: false,
   setLoading: (loading: boolean) => set({ loading }),
   error: null,

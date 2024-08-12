@@ -1,12 +1,21 @@
-const BookmarkIcon = () => {
+interface BookmarkIconProps {
+  onClick: () => void;
+  isBookmarked: boolean;
+}
+
+const BookmarkIcon = ({ onClick, isBookmarked }: BookmarkIconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      fill="none"
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
       className="size-6"
+      onClick={onClick}
+      style={{
+        fill: isBookmarked ? '#56bec0' : 'none',
+        color: isBookmarked ? '#56bec0' : '#ccc',
+      }}
     >
       <path
         strokeLinecap="round"

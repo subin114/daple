@@ -3,6 +3,11 @@ import { Box, Image } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { usePlaceStore } from '@/store/usePlaceStore';
 import BookmarkIcon from '@/assets/icons/BookmarkIcon';
+import { useEffect, useState } from 'react';
+import { BookmarkData, toggleBookmark } from '@/firebase/firestore/updateBookmark';
+import { useCurAuthStore } from '@/store/useCurAuthStore';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseConfig';
 
 interface CardProps {
   id: string;
@@ -16,6 +21,20 @@ interface CardProps {
 const PlaceCard = ({ id, imageUrl, category, title, address, sourcePage }: CardProps) => {
   const { setCurrentPlaceId } = usePlaceStore();
   const navigate = useNavigate();
+  const { userInfo, isAuthenticated } = useCurAuthStore();
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  useEffect(() => {
+    const checkBookmarked = async () => {
+      if (isAuthenticated && userInfo) {
+        const docRef = collection(db, 'users', userInfo.uid, 'bookmarks');
+        const q = query(docRef, where('placeId', '==', id));
+        const querySnapshot = await getDocs(q);
+        setIsBookmarked(!querySnapshot.empty);
+      }
+    };
+    checkBookmarked();
+  }, [id, isAuthenticated, userInfo]);
 
   const handleCardClick = () => {
     setCurrentPlaceId(id);
@@ -23,6 +42,26 @@ const PlaceCard = ({ id, imageUrl, category, title, address, sourcePage }: CardP
       navigate(`/near/detail/${id}`);
     } else if (sourcePage === 'region') {
       navigate(`/region/detail/${id}`);
+    } else if (sourcePage === 'bookmark') {
+      navigate(`/bookmark/detail/${id}`);
+    }
+  };
+
+  const handleBookmarkClick = async () => {
+    if (isAuthenticated && userInfo) {
+      const bookmarkData: BookmarkData = {
+        photo: [imageUrl],
+        primaryType: category,
+        displayName: title,
+        formattedAddress: address,
+        sourcePage,
+      };
+
+      await toggleBookmark(userInfo.uid, id, bookmarkData);
+      setIsBookmarked(prev => !prev);
+    } else {
+      alert('로그인 후 이용가능한 서비스입니다.');
+      console.error('User is not authenticated or userInfo is missing.');
     }
   };
 
@@ -34,7 +73,7 @@ const PlaceCard = ({ id, imageUrl, category, title, address, sourcePage }: CardP
       <Box p="4">
         <BoxTop>
           <Category>{category}</Category>
-          <BookmarkIcon />
+          <BookmarkIcon onClick={handleBookmarkClick} isBookmarked={isBookmarked} />
         </BoxTop>
         <Title>{title}</Title>
         <Address>{address}</Address>

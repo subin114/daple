@@ -1,5 +1,98 @@
+import { Place, usePlaceStore } from '@/store/usePlaceStore';
+import styled from '@emotion/styled';
+import PlaceCardList from '../common/PlaceCardList';
+import { useCurAuthStore } from '@/store/useCurAuthStore';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseConfig';
+import { useEffect } from 'react';
+
 const BookMark = () => {
-  return <div>북마크 페이지</div>;
+  const { loading, error, bookmarkPlaces, setBookmarkPlaces, setLoading } = usePlaceStore();
+  const { userInfo, isAuthenticated } = useCurAuthStore();
+
+  const fetchBookmarkPlaces = async () => {
+    setLoading(true);
+
+    try {
+      if (userInfo && isAuthenticated) {
+        const docRef = collection(db, 'users', userInfo.uid, 'bookmarks');
+        const snapshot = await getDocs(docRef);
+
+        const places: Place[] = snapshot.docs.map((doc, idx) => {
+          const data = doc.data();
+          return {
+            id: data.placeId || `unknown-id-${idx}`,
+            photo: data.photo?.length > 0 ? data.photo[0] : '../../../public/no_image.png',
+            primaryType: data.primaryType || 'Unknown',
+            displayName: data.displayName || 'no title',
+            formattedAddress: data.formattedAddress || 'no vicinity',
+            ...data,
+          } as Place;
+        });
+
+        setBookmarkPlaces(places);
+        console.log('EEEEEE', bookmarkPlaces);
+      } else {
+        setBookmarkPlaces([]);
+      }
+    } catch (err) {
+      console.error('Error fetchBookmarkPlaces', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBookmarkPlaces();
+  }, [isAuthenticated, userInfo]);
+
+  return (
+    <BookMarkContainer>
+      <Section>
+        {loading ? (
+          <div>로딩중...</div>
+        ) : error ? (
+          <div>에러발생</div>
+        ) : bookmarkPlaces.length > 0 ? (
+          <PlaceCardList places={bookmarkPlaces} sourcePage="bookmark" />
+        ) : isAuthenticated && userInfo ? (
+          <NoPlacesMessage>북마크한 플레이스가 없어요.</NoPlacesMessage>
+        ) : (
+          <NoPlacesMessage>로그인 후 이용가능한 서비스입니다.</NoPlacesMessage>
+        )}
+      </Section>
+    </BookMarkContainer>
+  );
 };
+
+const BookMarkContainer = styled.div`
+  max-width: 1200px;
+  width: auto;
+  min-height: calc(100vh - 330px);
+  height: auto;
+  margin: 50px auto;
+`;
+
+const Section = styled.section`
+  width: 100%;
+  height: auto;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const NoPlacesMessage = styled.div`
+  width: 100%;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  background-color: #f8f8f8;
+  color: #ccc;
+  border-radius: 20px;
+`;
 
 export default BookMark;
