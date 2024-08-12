@@ -38,19 +38,19 @@ const PlaceDetail = () => {
   useEffect(() => {
     if (!currentPlaceId) return;
 
-    // 로컬 스토리지 사용
-    const storedDetailPlace = localStorage.getItem(`placeDetail_${currentPlaceId}`);
+    // 세션 스토리지 사용
+    const storedDetailPlace = sessionStorage.getItem(`placeDetail_${currentPlaceId}`);
     if (storedDetailPlace) {
       setDetailPlace(JSON.parse(storedDetailPlace));
       setLoading(false);
       return;
     }
 
-    const saveDetailPlaceToLocalStorage = (place: Place | null) => {
+    const saveDetailPlaceToSessionStorage = (place: Place | null) => {
       if (place) {
-        localStorage.setItem(`placeDetail_${currentPlaceId}`, JSON.stringify(place));
+        sessionStorage.setItem(`placeDetail_${currentPlaceId}`, JSON.stringify(place));
       } else {
-        localStorage.removeItem(`placeDetail_${currentPlaceId}`);
+        sessionStorage.removeItem(`placeDetail_${currentPlaceId}`);
       }
     };
 
@@ -66,16 +66,16 @@ const PlaceDetail = () => {
 
         if (!foundPlace) {
           setDetailPlace(null);
-          saveDetailPlaceToLocalStorage(null);
+          saveDetailPlaceToSessionStorage(null);
         } else {
           setDetailPlace(foundPlace);
-          saveDetailPlaceToLocalStorage(foundPlace);
+          saveDetailPlaceToSessionStorage(foundPlace);
         }
       } catch (err) {
         console.error('place detail fetching error: ', err);
         setError('플레이스를 찾을 수 없습니다.');
         setDetailPlace(null);
-        saveDetailPlaceToLocalStorage(null);
+        saveDetailPlaceToSessionStorage(null);
       } finally {
         setLoading(false);
       }
