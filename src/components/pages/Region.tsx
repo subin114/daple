@@ -9,8 +9,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 export interface Location {
   name: string;
-  lat: number;
-  lng: number;
+  lat: number | null;
+  lng: number | null;
 }
 
 const locations: Location[] = [
@@ -36,8 +36,8 @@ const locations: Location[] = [
 const Region = () => {
   const { locationName } = useParams();
   const { regionsPlaces, setRegionsPlaces, setLoading, setError } = usePlaceStore();
-  const [lat, setLat] = useState<number>(37.514575);
-  const [lng, setLng] = useState<number>(127.0495556);
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const [activeLocation, setActiveLocation] = useState<string>(locations[0].name);
@@ -80,7 +80,7 @@ const Region = () => {
       setLng(location.lng);
       setActiveLocation(location.name);
     } else {
-      console.error('에뤄~~~');
+      console.error('Data fetching error by region');
     }
   }, [locationName]);
 
