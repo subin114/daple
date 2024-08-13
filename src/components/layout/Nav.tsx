@@ -2,9 +2,10 @@ import styled from '@emotion/styled';
 import logo from '../../assets/logo.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCurAuthStore } from '../../store/useCurAuthStore';
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
+import CustomAlert from './CustomAlert';
 
 interface MenuProps {
   active?: boolean;
@@ -13,8 +14,10 @@ interface MenuProps {
 const Nav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // const isActive = (path: string) => location.pathname === path;
   const isActive = (path: string) => location.pathname.startsWith(path);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string>('');
+  const [alertType, setAlertType] = useState<'success' | 'error'>('success');
 
   const { isAuthenticated, userInfo, isLoading, setLoading, logout } = useCurAuthStore();
 
@@ -28,6 +31,20 @@ const Nav = () => {
 
     return () => clearTimeout(timer);
   }, [setLoading]);
+
+  const handleLogout = async () => {
+    try {
+      logout();
+      setAlertMessage('로그아웃 되었습니다.');
+      setAlertType('success');
+      setShowAlert(true);
+    } catch (err) {
+      console.error('Logout error occurred: ', err);
+      setAlertMessage('로그아웃 중 오류가 발생했습니다.');
+      setAlertType('error');
+      setShowAlert(true);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -82,23 +99,22 @@ const Nav = () => {
           </Option>
           <Line />
           {isAuthenticated && userInfo ? (
-            <Option onClick={logout}>로그아웃</Option>
+            <Option onClick={handleLogout}>로그아웃</Option>
           ) : (
             <Option onClick={() => navigate('/login')} active={isActive('/login')}>
               로그인
             </Option>
           )}
         </NavRight>
+        {showAlert && (
+          <CustomAlert
+            alertDescription={alertMessage}
+            onClose={() => setShowAlert(false)}
+            type={alertType}
+          />
+        )}
         {isAuthenticated && userInfo ? (
           <UserInfo>
-            {/* {isLoading ? (
-              <Skeleton className="h-4 w-[50px]" />
-            ) : (
-              <>
-                <AvatarsSvg /> <UserName>{userInfo?.nickname}</UserName>
-              </>
-            )} */}
-            {/* <img src="https://source.boringavatars.com/beam/40" /> */}
             <AvatarsSvg />
             <UserName>{userInfo?.nickname}</UserName>
           </UserInfo>

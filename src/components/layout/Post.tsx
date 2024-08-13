@@ -11,6 +11,7 @@ import ViewIcon from './../../assets/icons/ViewIcon';
 import LikeIcon from '@/assets/icons/LikeIcon';
 import CommentsIcon from '@/assets/icons/CommentsIcon';
 import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
+import CustomAlert from './CustomAlert';
 
 interface PostProps {
   post: {
@@ -32,6 +33,7 @@ const Post = ({ post, isDetail }: PostProps) => {
   const navigate = useNavigate();
   const { userInfo } = useCurAuthStore();
   const [isLiked, setIsLiked] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const fetchLikedStatus = async () => {
@@ -47,7 +49,7 @@ const Post = ({ post, isDetail }: PostProps) => {
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!userInfo) {
-      alert('로그인이 필요합니다.');
+      setShowAlert(true);
       return;
     }
     try {
@@ -60,6 +62,7 @@ const Post = ({ post, isDetail }: PostProps) => {
         setIsLiked(true);
       }
     } catch (err) {
+      setShowAlert(true);
       console.error('Error updating likes:', err);
     }
   };
@@ -105,6 +108,13 @@ const Post = ({ post, isDetail }: PostProps) => {
             <LikeIcon isLiked={isLiked} />
             {post.likes || 0}
           </button>
+          {showAlert && (
+            <CustomAlert
+              alertDescription={'로그인 후 이용가능한 서비스입니다.'}
+              onClose={() => setShowAlert(false)}
+              type={'error'}
+            />
+          )}
           <button>
             <CommentsIcon />
             {post.commentsCount || 0}

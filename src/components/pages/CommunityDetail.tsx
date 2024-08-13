@@ -11,6 +11,7 @@ import { Button } from '../ui/button';
 import dayjs from 'dayjs';
 import { addComment } from '@/firebase/firestore/addComment';
 import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
+import CustomAlert from '../layout/CustomAlert';
 
 interface CommentData {
   id: string;
@@ -28,7 +29,11 @@ const CommunityDetail = () => {
   const [post, setPost] = useState<PostData | null>(null);
   const [comment, setComment] = useState<CommentData[]>([]);
   const [newComment, setNewComment] = useState<string>('');
-  const { userInfo } = useCurAuthStore();
+  const { userInfo, isAuthenticated } = useCurAuthStore();
+  // const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string>('');
+  const [alertType, setAlertType] = useState<'success' | 'error'>('error');
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -76,14 +81,33 @@ const CommunityDetail = () => {
 
   /** 댓글 저장 핸들러 */
   const handleSaveComment = async () => {
-    if (newComment.trim() === '' || !userInfo || !post || !id) return;
+    if (!userInfo || !isAuthenticated) {
+      setAlertMessage('로그인 후 이용가능한 서비스 입니다.');
+      setAlertType('error');
+      setShowAlert(true);
+      return;
+    }
+
+    if (newComment.trim() === '') {
+      setAlertMessage('댓글을 작성해 주세요.');
+      setAlertType('error');
+      setShowAlert(true);
+      return;
+    }
+
+    if (!post || !id) return;
 
     try {
-      const commentData = await addComment(id, newComment, userInfo.uid, userInfo.nickname);
-      console.log('새 댓글 정보', commentData);
+      await addComment(id, newComment, userInfo.uid, userInfo.nickname);
       setNewComment('');
+      setAlertMessage('댓글이 성공적으로 작성되었습니다.');
+      setShowAlert(true);
+      setAlertType('success');
     } catch (err) {
       console.error('디테일 페이지 댓글 저장 실패', err);
+      setAlertMessage('댓글 작성 중 오류가 발생했습니다.');
+      setAlertType('error');
+      setShowAlert(true);
     }
   };
 
@@ -127,6 +151,13 @@ const CommunityDetail = () => {
               onChange={e => setNewComment(e.target.value)}
               placeholder="댓글을 작성하세요"
             />
+            {showAlert && (
+              <CustomAlert
+                alertDescription={alertMessage}
+                onClose={() => setShowAlert(false)}
+                type={alertType}
+              />
+            )}
             <WriteBtn onClick={handleSaveComment}>댓글 작성</WriteBtn>
           </CommentSection>
         </EditorContainer>

@@ -12,6 +12,8 @@ import { authService, db, googleProvider } from '@/firebase/firebaseConfig';
 import { getUserInfo } from '@/firebase/firestoreConfig';
 import { doc, setDoc } from 'firebase/firestore';
 import { useCurAuthStore } from '@/store/useCurAuthStore';
+import { useState } from 'react';
+import CustomAlert from '../layout/CustomAlert';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,8 +31,8 @@ const Login = () => {
     validateEmail,
     validatePassword,
   } = useLoginStore();
-
   const { setUser, setUserInfo } = useCurAuthStore();
+  const [showAlert, setShowAlert] = useState(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,9 +57,8 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      console.log('Account login successfully');
-      alert('로그인에 성공하였습니다.');
-      navigate('/');
+      setShowAlert(true);
+      setTimeout(() => navigate('/'), 1500);
     } catch (err) {
       console.error('Account logging error: ', err);
 
@@ -119,14 +120,11 @@ const Login = () => {
           nickname: user.displayName || 'Unnamed',
         });
 
-        console.log('유저 확인용~~~~~~!!!!!!!!!!!~~~~~~~~', user);
-        alert('로그인에 성공하였습니다.');
-        navigate('/');
+        setShowAlert(true);
+        setTimeout(() => navigate('/'), 1500);
       }
 
       return user;
-
-      // return null;
     } catch (err) {
       console.error('Google login error: ', err);
       return null;
@@ -163,6 +161,13 @@ const Login = () => {
         </InputWrap>
         <div>
           <Btn type="submit">로그인</Btn>
+          {showAlert && (
+            <CustomAlert
+              alertDescription={'로그인에 성공하였습니다.'}
+              onClose={() => setShowAlert(false)}
+              type={'success'}
+            />
+          )}
           <GoogleBtn type="button" onClick={handleGoogleLogin}>
             <GoogleLoginIcon />
             Google로 로그인

@@ -31,7 +31,6 @@ export const useCurAuthStore = create<AuthState>(set => ({
     try {
       await logOut();
       set({ user: null, userInfo: null, isAuthenticated: false });
-      alert('로그아웃 되었습니다.');
     } catch (err) {
       console.error('Logout error occurred: ', err);
     }

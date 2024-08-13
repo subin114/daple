@@ -8,6 +8,7 @@ import { BookmarkData, toggleBookmark } from '@/firebase/firestore/updateBookmar
 import { useCurAuthStore } from '@/store/useCurAuthStore';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseConfig';
+import CustomAlert from '../layout/CustomAlert';
 
 interface CardProps {
   id: string;
@@ -23,6 +24,7 @@ const PlaceCard = ({ id, imageUrl, category, title, address, sourcePage }: CardP
   const navigate = useNavigate();
   const { userInfo, isAuthenticated } = useCurAuthStore();
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const checkBookmarked = async () => {
@@ -60,7 +62,7 @@ const PlaceCard = ({ id, imageUrl, category, title, address, sourcePage }: CardP
       await toggleBookmark(userInfo.uid, id, bookmarkData);
       setIsBookmarked(prev => !prev);
     } else {
-      alert('로그인 후 이용가능한 서비스입니다.');
+      setShowAlert(true);
       console.error('User is not authenticated or userInfo is missing.');
     }
   };
@@ -74,6 +76,13 @@ const PlaceCard = ({ id, imageUrl, category, title, address, sourcePage }: CardP
         <BoxTop>
           <Category>{category}</Category>
           <BookmarkIcon onClick={handleBookmarkClick} isBookmarked={isBookmarked} />
+          {showAlert && (
+            <CustomAlert
+              alertDescription={'로그인 후 이용가능한 서비스입니다.'}
+              onClose={() => setShowAlert(false)}
+              type={'error'}
+            />
+          )}
         </BoxTop>
         <Title>{title}</Title>
         <Address>{address}</Address>

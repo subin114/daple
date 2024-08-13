@@ -4,8 +4,9 @@ import { css, Global } from '@emotion/react';
 import SunEditor, { buttonList } from 'suneditor-react';
 import { Button } from '@/components/ui/button';
 import SunEditorCore from 'suneditor/src/lib/core';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
+import CustomAlert from './CustomAlert';
 
 interface TextEditorProps {
   onUpload: (content: string) => void;
@@ -14,6 +15,7 @@ interface TextEditorProps {
 
 const TextEditor = ({ onUpload, nickname }: TextEditorProps) => {
   const editor = useRef<SunEditorCore | null>(null);
+  const [showAlert, setShowAlert] = useState(false);
 
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
@@ -23,9 +25,10 @@ const TextEditor = ({ onUpload, nickname }: TextEditorProps) => {
     if (editor.current) {
       const content = editor.current.getContents(false).trim();
 
-      if (content.length === 0) {
-        alert('내용을 입력하세요!');
-        editor.current.setContents('');
+      const isEmpty = content === '' || content === '<p><br></p>' || content === '<br>';
+
+      if (isEmpty) {
+        setShowAlert(true);
         return;
       }
       onUpload(content);
@@ -101,6 +104,13 @@ const TextEditor = ({ onUpload, nickname }: TextEditorProps) => {
           height="130px"
           placeholder="텍스트를 입력하세요"
         />
+        {showAlert && (
+          <CustomAlert
+            alertDescription={'업로드 할 게시글을 작성해 주세요.'}
+            onClose={() => setShowAlert(false)}
+            type={'error'}
+          />
+        )}
         <UploadBtn onClick={handleUpload}>업로드하기</UploadBtn>
       </TextEditorWrap>
     </>

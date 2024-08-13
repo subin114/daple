@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { useSignUpStore } from '../../store/useUserStore';
 import { signUp } from '../../firebase/firebaseAuth';
 import { FirebaseCustomError } from '@/types/FirebaseCustomError';
+import { useState } from 'react';
+import CustomAlert from '../layout/CustomAlert';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -28,6 +30,7 @@ const SignUp = () => {
     validatePassword,
     validateNickname,
   } = useSignUpStore();
+  const [showAlert, setShowAlert] = useState(false);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -56,9 +59,8 @@ const SignUp = () => {
 
     try {
       await signUp(email, password, nickname);
-      console.log('Account created successfully');
-      alert('회원가입이 완료되었습니다.');
-      navigate('/login');
+      setShowAlert(true);
+      setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
       console.error('Error creating account: ', err);
       const firebaseError = (err as FirebaseCustomError).code;
@@ -130,6 +132,13 @@ const SignUp = () => {
         </InputWrap>
 
         <Btn type="submit">회원가입</Btn>
+        {showAlert && (
+          <CustomAlert
+            alertDescription={'로그인에 성공하였습니다.'}
+            onClose={() => setShowAlert(false)}
+            type={'success'}
+          />
+        )}
       </Form>
     </SignUpContainer>
   );
