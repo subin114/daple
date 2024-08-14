@@ -106,7 +106,7 @@ const Tabs = ({ fetchPlacesForTab, activeTab, handleTabChange, places, sourcePag
       {tabs.map(tab => (
         <TabsContent value={tab.value} key={tab.value}>
           {loading ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {Array.from({ length: 20 }).map((_, idx) => (
                 <div className="flex flex-col space-y-3" key={idx}>
                   <Skeleton className="h-[180px] w-[277px] rounded-xl" />
