@@ -13,12 +13,8 @@ const Home = () => {
         <TitleSection title={'내 근처 핫플레이스'} nav="/near" />
         <NearSwiper />
       </Section>
-      {/* <Section>
-        <TitleSection title={'이번주 핫플레이스 TOP6'} nav="/region" />
-        <PopularList />
-      </Section> */}
       <Section>
-        <TitleSection title={'지역별 핫플레이스'} nav="/region" />
+        <TitleSection title={'지역별 핫플레이스'} nav="/region/서울" />
         <RegionSwiper />
       </Section>
     </HomeContainer>

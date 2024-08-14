@@ -6,7 +6,7 @@ import { PLACE_TYPES } from '@/utils/placeTypeMappings';
 import { useEffect } from 'react';
 import { NoPlacesMessage } from '../pages/BookMark';
 
-interface TabData {
+export interface TabData {
   value: string;
   label: string;
   types: string[];
