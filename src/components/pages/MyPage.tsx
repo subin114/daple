@@ -3,45 +3,63 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
+import { NoPlacesMessage } from './BookMark';
+import { useCurAuthStore } from '@/store/useCurAuthStore';
 
 const MyPage = () => {
+  const { userInfo, isAuthenticated } = useCurAuthStore();
+
   return (
-    <CommunityDetailContainer>
-      <Section>
-        <ProfileSection>
-          <Profile>
-            <AvatarsSvg />
-          </Profile>
-          <BtnWrap>
-            <Btn>기본 프로필로 변경</Btn>
-            <Btn>원하는 프로필로 변경</Btn>
-          </BtnWrap>
-        </ProfileSection>
-        <Form>
-          <InputWrap>
-            <Label htmlFor="email">Email</Label>
-            <Input type="email" id="email" placeholder="subin@naver.com" name="email" disabled />
-          </InputWrap>
-          <InputWrap>
-            <LabelWrap>
-              <Label htmlFor="nickname">Nickname</Label>
-              <Button>변경</Button>
-            </LabelWrap>
-            <Input type="text" id="nickname" placeholder="nickname" name="nickname" />
-          </InputWrap>
-          <InputWrap>
-            <LabelWrap>
-              <Label htmlFor="password">Password</Label>
-              <Button>변경</Button>
-            </LabelWrap>
-            <Input type="password" id="password" placeholder="password" name="password" />
-          </InputWrap>
-          <Forget>
-            계정을 탈퇴하고 싶어요. <span>계정 탈퇴하기</span>
-          </Forget>
-        </Form>
-      </Section>
-    </CommunityDetailContainer>
+    <>
+      {isAuthenticated && userInfo ? (
+        <CommunityDetailContainer>
+          <Section>
+            <ProfileSection>
+              <Profile>
+                <AvatarsSvg />
+              </Profile>
+              <BtnWrap>
+                <Btn>기본 프로필로 변경</Btn>
+                <Btn>원하는 프로필로 변경</Btn>
+              </BtnWrap>
+            </ProfileSection>
+            <Form>
+              <InputWrap>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  type="email"
+                  id="email"
+                  placeholder="subin@naver.com"
+                  name="email"
+                  disabled
+                />
+              </InputWrap>
+              <InputWrap>
+                <LabelWrap>
+                  <Label htmlFor="nickname">Nickname</Label>
+                  <Button>변경</Button>
+                </LabelWrap>
+                <Input type="text" id="nickname" placeholder="nickname" name="nickname" />
+              </InputWrap>
+              <InputWrap>
+                <LabelWrap>
+                  <Label htmlFor="password">Password</Label>
+                  <Button>변경</Button>
+                </LabelWrap>
+                <Input type="password" id="password" placeholder="password" name="password" />
+              </InputWrap>
+              <Forget>
+                계정을 탈퇴하고 싶어요. <span>계정 탈퇴하기</span>
+              </Forget>
+            </Form>
+          </Section>
+        </CommunityDetailContainer>
+      ) : (
+        <NonLoginCommunityDetailContainer>
+          <NoPlacesMessage>로그인 후 이용가능한 서비스입니다.</NoPlacesMessage>
+        </NonLoginCommunityDetailContainer>
+      )}
+    </>
   );
 };
 
@@ -54,6 +72,14 @@ const CommunityDetailContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const NonLoginCommunityDetailContainer = styled.div`
+  max-width: 1200px;
+  width: auto;
+  min-height: calc(100vh - 330px);
+  height: auto;
+  margin: 50px auto;
 `;
 
 const Section = styled.section`
