@@ -38,6 +38,7 @@ const Nav = () => {
       setAlertMessage('로그아웃 되었습니다.');
       setAlertType('success');
       setShowAlert(true);
+      navigate('/');
     } catch (err) {
       console.error('Logout error occurred: ', err);
       setAlertMessage('로그아웃 중 오류가 발생했습니다.');

@@ -69,7 +69,6 @@ const NearSwiper = () => {
         const placeData = await Promise.all(
           categories.map(async category => {
             const places = await fetchPlacesInfo(lat, lng, category.types);
-            // return places[0];
             return {
               ...places[0],
               description: category.description,
@@ -156,7 +155,6 @@ const StyledSwiper = styled(SwiperComponent)`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f0f0;
     border-radius: 30px;
     cursor: pointer;
     overflow: hidden;
@@ -207,9 +205,9 @@ const BgImg = styled.div<{ backgroundImage: string | undefined }>`
     height: 100%;
     background: linear-gradient(
       to bottom,
-      rgba(50, 50, 50, 0.7) 0%,
-      rgba(50, 50, 50, 0.4) 65%,
-      rgba(50, 50, 50, 0) 100%
+      rgba(66, 92, 92, 0.7) 0%,
+      rgba(66, 92, 92, 0.2) 65%,
+      rgba(66, 92, 92, 0) 100%
     );
     opacity: 0.7;
     z-index: 1;

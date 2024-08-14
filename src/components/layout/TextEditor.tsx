@@ -16,6 +16,8 @@ interface TextEditorProps {
 const TextEditor = ({ onUpload, nickname }: TextEditorProps) => {
   const editor = useRef<SunEditorCore | null>(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string>('');
+  const [alertType, setAlertType] = useState<'success' | 'error'>('error');
 
   const getSunEditorInstance = (sunEditor: SunEditorCore) => {
     editor.current = sunEditor;
@@ -28,9 +30,16 @@ const TextEditor = ({ onUpload, nickname }: TextEditorProps) => {
       const isEmpty = content === '' || content === '<p><br></p>' || content === '<br>';
 
       if (isEmpty) {
+        setAlertMessage('업로드 할 게시글을 작성해 주세요.');
+        setAlertType('error');
         setShowAlert(true);
         return;
       }
+
+      setAlertMessage('게시글이 업로드 되었습니다.');
+      setAlertType('success');
+      setShowAlert(true);
+
       onUpload(content);
       editor.current.setContents('');
     }
@@ -106,9 +115,9 @@ const TextEditor = ({ onUpload, nickname }: TextEditorProps) => {
         />
         {showAlert && (
           <CustomAlert
-            alertDescription={'업로드 할 게시글을 작성해 주세요.'}
+            alertDescription={alertMessage}
             onClose={() => setShowAlert(false)}
-            type={'error'}
+            type={alertType}
           />
         )}
         <UploadBtn onClick={handleUpload}>업로드하기</UploadBtn>
