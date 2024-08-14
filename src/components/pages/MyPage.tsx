@@ -5,9 +5,21 @@ import { Label } from '@/components/ui/label';
 import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
 import { NoPlacesMessage } from './BookMark';
 import { useCurAuthStore } from '@/store/useCurAuthStore';
+import { useEffect, useState } from 'react';
 
 const MyPage = () => {
   const { userInfo, isAuthenticated } = useCurAuthStore();
+  const [inputNickname, setInputNickname] = useState('');
+
+  useEffect(() => {
+    if (userInfo?.nickname) {
+      setInputNickname(userInfo.nickname);
+    }
+  }, [userInfo?.nickname]);
+
+  const onChangeInputNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputNickname(e.target.value);
+  };
 
   return (
     <>
@@ -26,27 +38,34 @@ const MyPage = () => {
             <Form>
               <InputWrap>
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  type="email"
-                  id="email"
-                  placeholder="subin@naver.com"
-                  name="email"
-                  disabled
-                />
+                <Input type="email" id="email" placeholder={userInfo.email} name="email" disabled />
               </InputWrap>
               <InputWrap>
                 <LabelWrap>
                   <Label htmlFor="nickname">Nickname</Label>
                   <Button>변경</Button>
                 </LabelWrap>
-                <Input type="text" id="nickname" placeholder="nickname" name="nickname" />
+                <Input
+                  type="text"
+                  id="nickname"
+                  placeholder={userInfo.nickname}
+                  value={inputNickname}
+                  onChange={onChangeInputNickname}
+                  name="nickname"
+                />
               </InputWrap>
               <InputWrap>
                 <LabelWrap>
                   <Label htmlFor="password">Password</Label>
                   <Button>변경</Button>
                 </LabelWrap>
-                <Input type="password" id="password" placeholder="password" name="password" />
+                <Input
+                  type="password"
+                  id="password"
+                  placeholder="********"
+                  name="password"
+                  disabled
+                />
               </InputWrap>
               <Forget>
                 계정을 탈퇴하고 싶어요. <span>계정 탈퇴하기</span>
@@ -145,15 +164,9 @@ const Form = styled.form`
 const InputWrap = styled.div`
   input {
     margin-bottom: 15px;
-    border: none;
-    border-radius: 0;
-    border-bottom: 2px solid #fff;
-    background-color: transparent;
 
     &:focus {
-      border: none;
-      border-bottom: 2px solid #56bec0;
-      box-shadow: none;
+      box-shadow: 0 0 0 2px rgba(86, 190, 192, 0.3);
     }
   }
 `;
@@ -169,9 +182,9 @@ const LabelWrap = styled.div`
     width: 40px;
     height: 15px;
     font-size: 12px;
-    border: 1px solid #56bec0;
     background-color: #fff;
     color: #56bec0;
+    border: 1px solid #56bec0;
     border-radius: 20px;
 
     &:hover {
