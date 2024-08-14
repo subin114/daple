@@ -10,6 +10,7 @@ import { fetchFormattedAddress, fetchPlacesInfo } from '@/api/googlePlaceApi';
 import { PLACE_TYPES } from '@/utils/placeTypeMappings';
 import AddressIcon from '@/assets/icons/AddressIcon';
 import { useNavigate } from 'react-router-dom';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface CategoriesData {
   value: string;
@@ -41,7 +42,7 @@ const categories: CategoriesData[] = [
 ];
 
 const NearSwiper = () => {
-  const { setLoading, setError, setCurrentPlaceId } = usePlaceStore();
+  const { loading, setLoading, setError } = usePlaceStore();
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [_, setAddress] = useState('');
@@ -121,17 +122,25 @@ const NearSwiper = () => {
         },
       }}
     >
-      {filteredPlaces.map((place, idx) => (
-        <StyledSwiperSlide key={idx} onClick={() => handleSlideClick(place)}>
-          <BgImg backgroundImage={place?.photo?.[0]}>
-            <Description>{place?.description}</Description>
-            <Name>{place?.displayName?.text}</Name>
-            <Address>
-              <AddressIcon /> {place?.formattedAddress}
-            </Address>
-          </BgImg>
-        </StyledSwiperSlide>
-      ))}
+      {loading
+        ? Array.from({ length: 4 }).map((_, idx) => (
+            <StyledSwiperSlide key={idx}>
+              <div className="flex flex-col space-y-3" key={idx}>
+                <Skeleton className="h-[350px] w-[277px] rounded-xl" />
+              </div>
+            </StyledSwiperSlide>
+          ))
+        : filteredPlaces.map((place, idx) => (
+            <StyledSwiperSlide key={idx} onClick={() => handleSlideClick(place)}>
+              <BgImg backgroundImage={place?.photo?.[0]}>
+                <Description>{place?.description}</Description>
+                <Name>{place?.displayName?.text}</Name>
+                <Address>
+                  <AddressIcon /> {place?.formattedAddress}
+                </Address>
+              </BgImg>
+            </StyledSwiperSlide>
+          ))}
     </StyledSwiper>
   );
 };
@@ -175,7 +184,6 @@ const StyledSwiper = styled(SwiperComponent)`
 `;
 
 const StyledSwiperSlide = styled(SwiperSlideComponent)`
-  background-color: lightgray;
   height: 100%;
 `;
 

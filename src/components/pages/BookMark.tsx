@@ -5,6 +5,7 @@ import { useCurAuthStore } from '@/store/useCurAuthStore';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseConfig';
 import { useEffect } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const BookMark = () => {
   const { loading, error, bookmarkPlaces, setBookmarkPlaces, setLoading } = usePlaceStore();
@@ -50,9 +51,20 @@ const BookMark = () => {
     <BookMarkContainer>
       <Section>
         {loading ? (
-          <div>로딩중...</div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {Array.from({ length: 20 }).map((_, idx) => (
+              <div className="flex flex-col space-y-3" key={idx}>
+                <Skeleton className="h-[180px] w-[277px] rounded-xl" />
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[277px]" />
+                  <Skeleton className="h-4 w-[260px]" />
+                  <Skeleton className="h-4 w-[260px]" />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : error ? (
-          <div>에러발생</div>
+          <div>오류가 발생했어요. 잠시 후 다시 시도해주세요.</div>
         ) : bookmarkPlaces.length > 0 ? (
           <PlaceCardList places={bookmarkPlaces} sourcePage="bookmark" />
         ) : isAuthenticated && userInfo ? (

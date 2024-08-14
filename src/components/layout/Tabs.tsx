@@ -5,6 +5,7 @@ import { Place, usePlaceStore } from '@/store/usePlaceStore';
 import { PLACE_TYPES } from '@/utils/placeTypeMappings';
 import { useEffect } from 'react';
 import { NoPlacesMessage } from '../pages/BookMark';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export interface TabData {
   value: string;
@@ -105,9 +106,20 @@ const Tabs = ({ fetchPlacesForTab, activeTab, handleTabChange, places, sourcePag
       {tabs.map(tab => (
         <TabsContent value={tab.value} key={tab.value}>
           {loading ? (
-            <div>로딩중...</div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {Array.from({ length: 20 }).map((_, idx) => (
+                <div className="flex flex-col space-y-3" key={idx}>
+                  <Skeleton className="h-[180px] w-[277px] rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[277px]" />
+                    <Skeleton className="h-4 w-[260px]" />
+                    <Skeleton className="h-4 w-[260px]" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : error ? (
-            <div>에러발생</div>
+            <div>오류가 발생했어요. 잠시 후 다시 시도해주세요.</div>
           ) : places.length > 0 ? (
             <PlaceCardList places={places} sourcePage={sourcePage} />
           ) : (
