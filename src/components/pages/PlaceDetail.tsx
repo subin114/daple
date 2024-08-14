@@ -84,8 +84,8 @@ const PlaceDetail = () => {
     fetchDetailPlace();
   }, [currentPlaceId, places, regionsPlaces]);
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error</div>;
+  if (loading) return <div>로딩중...</div>;
+  if (error) return <div>오류가 발생했어요. 잠시 후 다시 시도해주세요.</div>;
 
   if (!detailPlace) {
     return <PlaceDetailContainer>플레이스가 존재하지 않습니다.</PlaceDetailContainer>;
