@@ -5,19 +5,28 @@ import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 import styled from '@emotion/styled';
 import { slide01, slide02, slide03 } from '../../assets/slideImg';
+import { ArrowRightIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface swiper {
   name: string;
   imageUrl: string;
+  nav: string;
 }
 
 const swiperImg: swiper[] = [
-  { name: '1', imageUrl: slide02 },
-  { name: '2', imageUrl: slide01 },
-  { name: '3', imageUrl: slide03 },
+  { name: '내 근처 핫플 보러가기', imageUrl: slide01, nav: '/near' },
+  { name: '지역별 핫플 보러가기', imageUrl: slide02, nav: '/region/서울' },
+  {
+    name: '커뮤니티 보러가기',
+    imageUrl: slide03,
+    nav: '/community',
+  },
 ];
 
 const MainSwiper = () => {
+  const navigate = useNavigate();
+
   return (
     <StyledSwiper
       modules={[Navigation, Pagination]}
@@ -29,7 +38,9 @@ const MainSwiper = () => {
       {swiperImg.map(swiper => (
         <StyledSwiperSlide key={swiper.name}>
           <Img src={swiper.imageUrl} alt={swiper.name} />
-          <Name>{swiper.name}</Name>
+          <Name onClick={() => navigate(swiper.nav)}>
+            {swiper.name} <ArrowRightIcon />
+          </Name>
         </StyledSwiperSlide>
       ))}
     </StyledSwiper>
@@ -71,6 +82,7 @@ const StyledSwiper = styled(SwiperComponent)`
 const StyledSwiperSlide = styled(SwiperSlideComponent)`
   height: 100%;
   background-color: lightgray;
+  overflow: hidden;
 `;
 
 const Img = styled.img`
@@ -79,11 +91,32 @@ const Img = styled.img`
 `;
 
 const Name = styled.span`
-  color: #000;
-  font-size: 25px;
   position: absolute;
-  bottom: 30%;
-  left: 10%;
+  bottom: 155px;
+  left: 108px;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: rgba(205, 205, 205, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(89, 190, 192, 0.2);
+    border: 1px solid rgba(89, 190, 192, 0.6);
+  }
+
+  svg {
+    width: 13px;
+    height: 13px;
+    margin-left: 4px;
+  }
 `;
 
 export default MainSwiper;
