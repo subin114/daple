@@ -81,10 +81,6 @@ const CommunityDetail = () => {
   /** 댓글 저장 핸들러 */
   const handleSaveComment = async () => {
     if (!userInfo || !isAuthenticated) {
-      setNewComment('');
-      setAlertMessage('로그인 후 이용가능한 서비스 입니다.');
-      setAlertType('error');
-      setShowAlert(true);
       return;
     }
 
@@ -139,29 +135,32 @@ const CommunityDetail = () => {
             <NoCommentContainer>아직 작성된 댓글이 없어요</NoCommentContainer>
           )}
         </CommentBox>
-        <EditorContainer>
-          <CommentMyInfo>
-            <ProfileImg>
-              <AvatarsSvg />
-            </ProfileImg>
-            <Nickname>{userInfo?.nickname}</Nickname>
-          </CommentMyInfo>
-          <CommentSection>
-            <TextareaStyled
-              value={newComment}
-              onChange={e => setNewComment(e.target.value)}
-              placeholder="댓글을 작성하세요"
-            />
-            {showAlert && (
-              <CustomAlert
-                alertDescription={alertMessage}
-                onClose={() => setShowAlert(false)}
-                type={alertType}
+        {userInfo && isAuthenticated && (
+          <EditorContainer>
+            <CommentMyInfo>
+              <ProfileImg>
+                <AvatarsSvg />
+              </ProfileImg>
+              <Nickname>{userInfo?.nickname}</Nickname>
+            </CommentMyInfo>
+
+            <CommentSection>
+              <TextareaStyled
+                value={newComment}
+                onChange={e => setNewComment(e.target.value)}
+                placeholder="댓글을 작성하세요"
               />
-            )}
-            <WriteBtn onClick={handleSaveComment}>댓글 작성</WriteBtn>
-          </CommentSection>
-        </EditorContainer>
+              {showAlert && (
+                <CustomAlert
+                  alertDescription={alertMessage}
+                  onClose={() => setShowAlert(false)}
+                  type={alertType}
+                />
+              )}
+              <WriteBtn onClick={handleSaveComment}>댓글 작성</WriteBtn>
+            </CommentSection>
+          </EditorContainer>
+        )}
       </Section>
     </CommunityDetailContainer>
   );
