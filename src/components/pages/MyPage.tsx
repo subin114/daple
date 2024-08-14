@@ -20,7 +20,7 @@ const MyPage = () => {
         <Form>
           <InputWrap>
             <Label htmlFor="email">Email</Label>
-            <Input type="email" id="email" placeholder="Email" name="email" />
+            <Input type="email" id="email" placeholder="subin@naver.com" name="email" disabled />
           </InputWrap>
           <InputWrap>
             <LabelWrap>
@@ -57,12 +57,15 @@ const CommunityDetailContainer = styled.div`
 `;
 
 const Section = styled.section`
-  width: 100%;
+  width: auto;
   height: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+  padding: 50px;
+  border-radius: 30px;
+  background: #ecf6f8;
 `;
 
 const ProfileSection = styled.div`
@@ -80,7 +83,7 @@ const Profile = styled.div`
   margin-bottom: 20px;
   border-radius: 50px;
   background: #eee;
-  border: 2px solid #eee;
+  border: 2px solid #fff;
 
   svg {
     width: 100%;
@@ -118,11 +121,12 @@ const InputWrap = styled.div`
     margin-bottom: 15px;
     border: none;
     border-radius: 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 2px solid #fff;
+    background-color: transparent;
 
     &:focus {
       border: none;
-      border-bottom: 1px solid #56bec0;
+      border-bottom: 2px solid #56bec0;
       box-shadow: none;
     }
   }
