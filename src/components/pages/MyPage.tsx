@@ -10,6 +10,7 @@ import { updateNickname } from '@/firebase/firestore/updateUserInfo';
 import { isValidNickname, useSignUpStore } from '@/store/useUserStore';
 import { Warning } from './SignUp';
 import CustomAlert from '../layout/CustomAlert';
+import { DeleteAccountModal } from '../layout/DeleteAccountModal';
 
 const MyPage = () => {
   const { userInfo, isAuthenticated, updateUserNickname } = useCurAuthStore();
@@ -108,7 +109,7 @@ const MyPage = () => {
                 />
               </InputWrap>
               <Forget>
-                계정을 탈퇴하고 싶어요. <span>계정 탈퇴하기</span>
+                계정을 탈퇴하고 싶어요. <DeleteAccountModal />
               </Forget>
               {showAlert && (
                 <CustomAlert
