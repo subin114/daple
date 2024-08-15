@@ -32,11 +32,9 @@ const isValidEmail = (email: string): boolean => {
 const isValidPassword = (password: string): boolean =>
   password.length >= 6 && password.length <= 12;
 
-const isValidNickname = (nickname: string): boolean => {
-  const lengthValid = nickname.length >= 2 && nickname.length <= 10;
-  const regex = /^[가-힣]+$/;
-  const regexValid = regex.test(nickname);
-  return lengthValid && regexValid;
+export const isValidNickname = (nickname: string): boolean => {
+  const regex = /^[가-힣]{2,10}$/;
+  return regex.test(nickname);
 };
 
 // 회원가입

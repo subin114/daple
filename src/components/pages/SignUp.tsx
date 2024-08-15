@@ -183,7 +183,7 @@ const InputWrap = styled.div`
   }
 `;
 
-const Warning = styled.span<{ visible: boolean }>`
+export const Warning = styled.span<{ visible: boolean }>`
   display: inline-block;
   height: 15px;
   weight: 100%;

@@ -6,10 +6,18 @@ import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
 import { NoPlacesMessage } from './BookMark';
 import { useCurAuthStore } from '@/store/useCurAuthStore';
 import { useEffect, useState } from 'react';
+import { updateNickname } from '@/firebase/firestore/updateUserInfo';
+import { isValidNickname, useSignUpStore } from '@/store/useUserStore';
+import { Warning } from './SignUp';
+import CustomAlert from '../layout/CustomAlert';
 
 const MyPage = () => {
-  const { userInfo, isAuthenticated } = useCurAuthStore();
+  const { userInfo, isAuthenticated, updateUserNickname } = useCurAuthStore();
+  const { nicknameError, setNicknameError } = useSignUpStore();
   const [inputNickname, setInputNickname] = useState('');
+  const [alertMessage, setAlertMessage] = useState<string>('');
+  const [alertType, setAlertType] = useState<'success' | 'error'>('error');
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     if (userInfo?.nickname) {
@@ -19,6 +27,37 @@ const MyPage = () => {
 
   const onChangeInputNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputNickname(e.target.value);
+  };
+
+  const handleChangeNickname = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const nicknameIsValid = isValidNickname(inputNickname);
+    if (!nicknameIsValid) {
+      setNicknameError('닉네임은 한글 2~10자리 이어야 합니다.');
+      return;
+    }
+
+    if (userInfo?.nickname === inputNickname) {
+      setNicknameError('기존 닉네임과 동일한 닉네임으로 변경할 수 없습니다.');
+      return;
+    }
+
+    if (userInfo && inputNickname) {
+      try {
+        await updateNickname(userInfo.uid, inputNickname);
+        updateUserNickname(inputNickname);
+        setAlertMessage('닉네임이 변경되었습니다.');
+        setNicknameError('');
+        setAlertType('success');
+        setShowAlert(true);
+      } catch (err) {
+        setNicknameError('');
+        setAlertType('error');
+        setAlertMessage('닉네임 변경 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        setShowAlert(true);
+      }
+    }
   };
 
   return (
@@ -43,7 +82,7 @@ const MyPage = () => {
               <InputWrap>
                 <LabelWrap>
                   <Label htmlFor="nickname">Nickname</Label>
-                  <Button>변경</Button>
+                  <Button onClick={handleChangeNickname}>변경</Button>
                 </LabelWrap>
                 <Input
                   type="text"
@@ -53,6 +92,7 @@ const MyPage = () => {
                   onChange={onChangeInputNickname}
                   name="nickname"
                 />
+                <Warning visible={!!nicknameError}>{nicknameError}</Warning>
               </InputWrap>
               <InputWrap>
                 <LabelWrap>
@@ -70,6 +110,13 @@ const MyPage = () => {
               <Forget>
                 계정을 탈퇴하고 싶어요. <span>계정 탈퇴하기</span>
               </Forget>
+              {showAlert && (
+                <CustomAlert
+                  alertDescription={alertMessage}
+                  onClose={() => setShowAlert(false)}
+                  type={alertType}
+                />
+              )}
             </Form>
           </Section>
         </CommunityDetailContainer>
@@ -162,9 +209,13 @@ const Form = styled.form`
 `;
 
 const InputWrap = styled.div`
-  input {
-    margin-bottom: 15px;
+  margin-bottom: 25px;
 
+  &:nth-of-type(2) {
+    margin-bottom: 0;
+  }
+
+  input {
     &:focus {
       box-shadow: 0 0 0 2px rgba(86, 190, 192, 0.3);
     }

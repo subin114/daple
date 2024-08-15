@@ -16,6 +16,7 @@ interface AuthState {
   setUser: (user: FirebaseUser | null) => void;
   setUserInfo: (info: UserInfo | null) => void;
   setLoading: (loading: boolean) => void;
+  updateUserNickname: (nickname: string) => void;
   logout: () => void;
 }
 
@@ -27,6 +28,10 @@ export const useCurAuthStore = create<AuthState>(set => ({
   setUser: user => set({ user, isAuthenticated: !!user }),
   setUserInfo: info => set({ userInfo: info }),
   setLoading: loading => set({ isLoading: loading }),
+  updateUserNickname: (newNickname: string) =>
+    set(state => ({
+      userInfo: state.userInfo ? { ...state.userInfo, nickname: newNickname } : state.userInfo,
+    })),
   logout: async () => {
     try {
       await logOut();

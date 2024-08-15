@@ -13,7 +13,7 @@ const CustomAlert = ({ alertDescription, onClose, type }: CustomAlertProps) => {
   const [isVisible, _] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
+    const timer = setTimeout(onClose, 1700);
     return () => clearTimeout(timer);
   }, []);
 
@@ -33,24 +33,24 @@ const AlertStyled = styled(Alert, {
   top: 12%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 999;
-  padding: 20px 100px;
+  z-index: 9999;
+  padding: 17px 100px;
   color: #fff;
   font-size: 15px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 50px;
   transition:
-    opacity 0.5s ease-in-out,
-    transform 0.5s ease-in-out;
+    opacity 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
   animation: ${({ isVisible }) =>
       isVisible
         ? css`
-            ${fadeIn} 0.5s ease-out
+            ${fadeIn} 0.3s ease-out
           `
         : css`
-            ${fadeOut} 0.5s ease-in
+            ${fadeOut} 0.3s ease-in
           `}
     forwards;
-  background-color: ${({ type }) => (type === 'success' ? '#4caf50' : '#f44336')};
+  background-color: ${({ type }) => (type === 'success' ? '#98C056' : '#FF574B ')};
 `;
 
 const fadeIn = keyframes`
