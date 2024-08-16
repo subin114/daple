@@ -11,7 +11,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-export function DeleteAccountModal() {
+interface DeleteAccountModalProps {
+  onClick: () => void;
+}
+
+export function DeleteAccountModal({ onClick }: DeleteAccountModalProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -23,7 +27,9 @@ export function DeleteAccountModal() {
         </DialogHeader>
         <DialogDescriptionStyled>정말로 계정을 탈퇴하시겠어요? ( ᴗ_ᴗ̩̩ )</DialogDescriptionStyled>
         <DialogFooter className="sm:justify-end">
-          <DeleteBtn type="button">예</DeleteBtn>
+          <DeleteBtn type="button" onClick={onClick}>
+            예
+          </DeleteBtn>
           <DialogClose asChild>
             <CancelBtn type="button" variant="secondary">
               아니오

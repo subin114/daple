@@ -11,14 +11,17 @@ import { isValidNickname, useSignUpStore } from '@/store/useUserStore';
 import { Warning } from './SignUp';
 import CustomAlert from '../layout/CustomAlert';
 import { DeleteAccountModal } from '../layout/DeleteAccountModal';
+import { deleteAccount } from '@/firebase/firestore/deleteAccount';
+import { useNavigate } from 'react-router-dom';
 
 const MyPage = () => {
-  const { userInfo, isAuthenticated, updateUserNickname } = useCurAuthStore();
+  const { userInfo, isAuthenticated, updateUserNickname, logout } = useCurAuthStore();
   const { nicknameError, setNicknameError } = useSignUpStore();
   const [inputNickname, setInputNickname] = useState('');
   const [alertMessage, setAlertMessage] = useState<string>('');
   const [alertType, setAlertType] = useState<'success' | 'error'>('error');
   const [showAlert, setShowAlert] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userInfo?.nickname) {
@@ -58,6 +61,24 @@ const MyPage = () => {
         setAlertMessage('닉네임 변경 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
         setShowAlert(true);
       }
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    try {
+      await deleteAccount();
+      logout();
+
+      setAlertType('success');
+      setAlertMessage('계정 탈퇴가 완료되었습니다.');
+      setShowAlert(true);
+
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+      console.log('Account deletion successful');
+    } catch (err) {
+      console.error('Account deletion error', err);
     }
   };
 
@@ -109,7 +130,7 @@ const MyPage = () => {
                 />
               </InputWrap>
               <Forget>
-                계정을 탈퇴하고 싶어요. <DeleteAccountModal />
+                계정을 탈퇴하고 싶어요. <DeleteAccountModal onClick={handleDeleteAccount} />
               </Forget>
               {showAlert && (
                 <CustomAlert
