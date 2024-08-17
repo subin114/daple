@@ -23,6 +23,7 @@ const AuthInitializer = () => {
               uid: user.uid,
               email: userInfo.email,
               nickname: userInfo.nickname,
+              avatar: userInfo.avatar,
             });
           } else {
             setUserInfo(null);

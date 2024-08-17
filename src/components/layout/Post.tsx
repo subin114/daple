@@ -3,7 +3,7 @@ import { ProfileImg } from '../pages/Community';
 import DOMPurify from 'dompurify';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
-import { useCurAuthStore } from '@/store/useCurAuthStore';
+import { AvatarInfo, useCurAuthStore } from '@/store/useCurAuthStore';
 import { addLike, checkUserLiked, removeLike } from '@/firebase/firestore/updateLike';
 import { updateView } from '@/firebase/firestore/updateView';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,7 @@ interface PostProps {
     uid: string;
     nickname: string;
     createdAt: Date;
+    avatar: AvatarInfo;
     likes: number;
     commentsCount: number;
     views: number;

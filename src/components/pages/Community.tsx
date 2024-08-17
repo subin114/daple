@@ -5,7 +5,7 @@ import Post from '../layout/Post';
 import { useEffect, useState } from 'react';
 import { collection, onSnapshot, orderBy, query } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseConfig';
-import { useCurAuthStore } from '@/store/useCurAuthStore';
+import { AvatarInfo, useCurAuthStore } from '@/store/useCurAuthStore';
 import { addPost } from '@/firebase/firestore/addPost';
 import CommunitySearch from '../layout/CommunitySearch';
 import { NoCommentContainer } from './CommunityDetail';
@@ -16,6 +16,7 @@ export interface PostData {
   uid: string;
   nickname: string;
   createdAt: Date;
+  avatar: AvatarInfo;
   likes: number;
   commentsCount: number;
   views: number;
@@ -41,11 +42,13 @@ const Community = () => {
         uid: doc.data().uid,
         nickname: doc.data().nickname,
         createdAt: doc.data().createdAt.toDate(),
+        avatar: doc.data().avatar,
         likes: doc.data().likes,
         commentsCount: doc.data().commentsCount,
         views: doc.data().views,
       }));
       setPosts(postsData);
+      console.log('!!!!!!!!!!!!!!!!!!', postsData);
     });
 
     return () => unsubscribe();
@@ -65,7 +68,8 @@ const Community = () => {
   const handleUpload = async (content: string) => {
     if (userInfo) {
       console.log('유저의 정보', userInfo);
-      const newPost = await addPost(content, userInfo.uid, userInfo.nickname);
+      const newPost = await addPost(content, userInfo.uid, userInfo.nickname, userInfo.avatar);
+      console.log('Avatar Info before addPostsdsdsdsdsdsdds:', userInfo.uid, userInfo.avatar);
       console.log('유저가 작성한 포스팅 정보', newPost);
       if (newPost) {
         setPosts([newPost, ...posts]);

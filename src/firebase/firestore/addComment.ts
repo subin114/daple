@@ -1,14 +1,22 @@
 import { addDoc, collection, doc, increment, updateDoc } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
+import { AvatarInfo } from '@/store/useCurAuthStore';
 
 /** comment 컬렉션 - 댓글 저장 */
-export const addComment = async (id: string, content: string, uid: string, nickname: string) => {
+export const addComment = async (
+  id: string,
+  content: string,
+  uid: string,
+  nickname: string,
+  avatar: AvatarInfo,
+) => {
   try {
     const docRef = await addDoc(collection(db, 'posts', id, 'comments'), {
       content,
       uid,
       nickname,
       createdAt: new Date(),
+      avatar,
     });
 
     // 댓글 수를 증가시키기
@@ -25,6 +33,7 @@ export const addComment = async (id: string, content: string, uid: string, nickn
       uid,
       nickname,
       createdAt: new Date(),
+      avatar,
     };
   } catch (err) {
     console.error('Error saving comment:', err);

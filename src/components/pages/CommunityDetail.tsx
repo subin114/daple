@@ -19,6 +19,7 @@ interface CommentData {
   uid: string;
   nickname: string;
   createdAt: Date;
+  avatar: string[];
   likes: number;
   commentsCount: number;
   views: number;
@@ -94,7 +95,7 @@ const CommunityDetail = () => {
     if (!post || !id) return;
 
     try {
-      await addComment(id, newComment, userInfo.uid, userInfo.nickname);
+      await addComment(id, newComment, userInfo.uid, userInfo.nickname, userInfo.avatar);
       setNewComment('');
       setAlertMessage('댓글이 성공적으로 작성되었습니다.');
       setShowAlert(true);
