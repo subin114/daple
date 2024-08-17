@@ -10,8 +10,8 @@ import { useEffect, useState } from 'react';
 import ViewIcon from './../../assets/icons/ViewIcon';
 import LikeIcon from '@/assets/icons/LikeIcon';
 import CommentsIcon from '@/assets/icons/CommentsIcon';
-import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
 import CustomAlert from './CustomAlert';
+import Avatar from 'boring-avatars';
 
 interface PostProps {
   post: {
@@ -93,7 +93,13 @@ const Post = ({ post, isDetail }: PostProps) => {
         style={{ cursor: isDetail ? 'default' : 'pointer' }}
       >
         <ProfileImg>
-          <AvatarsSvg />
+          <Avatar
+            name={userInfo?.avatar?.name || userInfo?.email}
+            variant={userInfo?.avatar?.variant || 'beam'}
+            colors={
+              userInfo?.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']
+            }
+          />
         </ProfileImg>
         <Nickname>{post.nickname}</Nickname>
       </BoardUserInfo>

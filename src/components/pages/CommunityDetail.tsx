@@ -10,8 +10,8 @@ import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 import dayjs from 'dayjs';
 import { addComment } from '@/firebase/firestore/addComment';
-import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
 import CustomAlert from '../layout/CustomAlert';
+import Avatar from 'boring-avatars';
 
 interface CommentData {
   id: string;
@@ -121,7 +121,19 @@ const CommunityDetail = () => {
                 <CommentWrap key={c.id}>
                   <CommentUserInfo>
                     <ProfileImg>
-                      <AvatarsSvg />
+                      <Avatar
+                        name={userInfo?.avatar?.name || userInfo?.email}
+                        variant={userInfo?.avatar?.variant || 'beam'}
+                        colors={
+                          userInfo?.avatar?.colors || [
+                            '#E6626F',
+                            '#EFAE78',
+                            '#F5E19C',
+                            '#A2CA8E',
+                            '#66AF91',
+                          ]
+                        }
+                      />
                     </ProfileImg>
                     <Nickname>
                       {c.nickname} <span>{dayjs(c.createdAt).format('YYYY/MM/DD · HH:mm')}</span>
@@ -139,7 +151,19 @@ const CommunityDetail = () => {
           <EditorContainer>
             <CommentMyInfo>
               <ProfileImg>
-                <AvatarsSvg />
+                <Avatar
+                  name={userInfo?.avatar?.name || userInfo?.email}
+                  variant={userInfo?.avatar?.variant || 'beam'}
+                  colors={
+                    userInfo?.avatar?.colors || [
+                      '#E6626F',
+                      '#EFAE78',
+                      '#F5E19C',
+                      '#A2CA8E',
+                      '#66AF91',
+                    ]
+                  }
+                />
               </ProfileImg>
               <Nickname>{userInfo?.nickname}</Nickname>
             </CommentMyInfo>

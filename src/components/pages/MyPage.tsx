@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
 import { NoPlacesMessage } from './BookMark';
 import { useCurAuthStore } from '@/store/useCurAuthStore';
 import { useEffect, useState } from 'react';
@@ -13,6 +12,7 @@ import CustomAlert from '../layout/CustomAlert';
 import { DeleteAccountModal } from '../layout/DeleteAccountModal';
 import { deleteAccount } from '@/firebase/firestore/deleteAccount';
 import { useNavigate } from 'react-router-dom';
+import Avatar from 'boring-avatars';
 
 const MyPage = () => {
   const { userInfo, isAuthenticated, updateUserNickname, logout } = useCurAuthStore();
@@ -89,7 +89,19 @@ const MyPage = () => {
           <Section>
             <ProfileSection>
               <Profile>
-                <AvatarsSvg />
+                <Avatar
+                  name={userInfo?.avatar?.name || userInfo?.email}
+                  variant={userInfo?.avatar?.variant || 'beam'}
+                  colors={
+                    userInfo?.avatar?.colors || [
+                      '#E6626F',
+                      '#EFAE78',
+                      '#F5E19C',
+                      '#A2CA8E',
+                      '#66AF91',
+                    ]
+                  }
+                />
               </Profile>
               <BtnWrap>
                 <Btn>기본 프로필로 변경</Btn>

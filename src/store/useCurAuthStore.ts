@@ -2,10 +2,17 @@ import { create } from 'zustand';
 import { User as FirebaseUser } from 'firebase/auth';
 import { logOut } from '../firebase/firebaseAuth';
 
+export interface AvatarInfo {
+  name: string;
+  variant: 'marble' | 'beam' | 'pixel' | 'sunset' | 'ring' | 'bauhaus';
+  colors: string[];
+}
+
 export interface UserInfo {
   uid: string;
   email: string;
   nickname: string;
+  avatar: AvatarInfo;
 }
 
 interface AuthState {

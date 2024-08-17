@@ -5,8 +5,9 @@ import SunEditor, { buttonList } from 'suneditor-react';
 import { Button } from '@/components/ui/button';
 import SunEditorCore from 'suneditor/src/lib/core';
 import { useRef, useState } from 'react';
-import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
 import CustomAlert from './CustomAlert';
+import Avatar from 'boring-avatars';
+import { useCurAuthStore } from '@/store/useCurAuthStore';
 
 interface TextEditorProps {
   onUpload: (content: string) => void;
@@ -14,6 +15,7 @@ interface TextEditorProps {
 }
 
 const TextEditor = ({ onUpload, nickname }: TextEditorProps) => {
+  const { userInfo } = useCurAuthStore();
   const editor = useRef<SunEditorCore | null>(null);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
@@ -49,7 +51,13 @@ const TextEditor = ({ onUpload, nickname }: TextEditorProps) => {
     <>
       <UserInfo>
         <ProfileImg>
-          <AvatarsSvg />
+          <Avatar
+            name={userInfo?.avatar?.name || userInfo?.email}
+            variant={userInfo?.avatar?.variant || 'beam'}
+            colors={
+              userInfo?.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']
+            }
+          />
         </ProfileImg>
         <Nickname>{nickname}</Nickname>
       </UserInfo>

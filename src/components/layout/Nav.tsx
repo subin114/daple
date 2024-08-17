@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useCurAuthStore } from '../../store/useCurAuthStore';
 import { memo, useEffect, useState } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import AvatarsSvg from '@/assets/profileImg/AvatarsSvg';
+import Avatar from 'boring-avatars';
 import CustomAlert from './CustomAlert';
 
 interface MenuProps {
@@ -116,7 +116,13 @@ const Nav = () => {
         )}
         {isAuthenticated && userInfo ? (
           <UserInfo>
-            <AvatarsSvg />
+            <Avatar
+              name={userInfo?.avatar?.name || userInfo?.email}
+              variant={userInfo?.avatar?.variant || 'beam'}
+              colors={
+                userInfo?.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']
+              }
+            />
             <UserName>{userInfo?.nickname}</UserName>
           </UserInfo>
         ) : null}

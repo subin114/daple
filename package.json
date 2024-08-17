@@ -23,6 +23,7 @@
     "@shadcn/ui": "^0.0.4",
     "@types/googlemaps": "^3.43.3",
     "axios": "^1.7.2",
+    "boring-avatars": "^1.10.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.12",
