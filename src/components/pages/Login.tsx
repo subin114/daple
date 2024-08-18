@@ -56,38 +56,10 @@ const Login = () => {
     }
 
     try {
-      // signIn 함수 호출
-      const { user, userInfo } = await signIn(email, password);
+      await signIn(email, password);
 
-      if (user) {
-        if (!userInfo) {
-          await setDoc(doc(db, 'users', user.uid), {
-            uid: user.uid,
-            email: user.email,
-            nickname: user.displayName,
-            photoURL: user.photoURL,
-          });
-          console.log('New user created and stored in Firestore.');
-        }
-
-        const avatar: AvatarInfo = {
-          name: user.displayName || user.email?.split('@')[0] || 'Unnamed',
-          variant: 'beam',
-          colors: ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91'],
-        };
-
-        // userInfo가 없을 경우 기본값으로 설정
-        setUser(user);
-        setUserInfo({
-          uid: user.uid,
-          email: user.email as string,
-          nickname: user.displayName || 'Unnamed',
-          avatar: userInfo?.avatar || avatar,
-        });
-
-        setShowAlert(true);
-        setTimeout(() => navigate('/'), 1500);
-      }
+      setShowAlert(true);
+      setTimeout(() => navigate('/'), 1500);
     } catch (err) {
       console.error('Account logging error: ', err);
 
@@ -143,7 +115,7 @@ const Login = () => {
         }
 
         const avatar: AvatarInfo = {
-          name: user.displayName || user.email?.split('@')[0] || 'Unnamed',
+          name: user.displayName || '',
           variant: 'beam',
           colors: ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91'],
         };
@@ -152,7 +124,7 @@ const Login = () => {
         setUserInfo({
           uid: user.uid,
           email: user.email as string,
-          nickname: user.displayName || 'Unnamed',
+          nickname: user.displayName || '',
           avatar,
         });
 
