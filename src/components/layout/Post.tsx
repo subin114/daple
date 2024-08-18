@@ -95,11 +95,9 @@ const Post = ({ post, isDetail }: PostProps) => {
       >
         <ProfileImg>
           <Avatar
-            name={userInfo?.avatar?.name || userInfo?.email}
-            variant={userInfo?.avatar?.variant || 'beam'}
-            colors={
-              userInfo?.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']
-            }
+            name={post.avatar?.name || post.nickname}
+            variant={post.avatar?.variant || 'beam'}
+            colors={post.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']}
           />
         </ProfileImg>
         <Nickname>{post.nickname}</Nickname>
