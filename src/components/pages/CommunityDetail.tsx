@@ -19,7 +19,11 @@ interface CommentData {
   uid: string;
   nickname: string;
   createdAt: Date;
-  avatar: string[];
+  avatar: {
+    name: string;
+    variant: 'marble' | 'beam' | 'pixel' | 'sunset' | 'ring' | 'bauhaus';
+    colors: string[];
+  };
   likes: number;
   commentsCount: number;
   views: number;
@@ -123,10 +127,10 @@ const CommunityDetail = () => {
                   <CommentUserInfo>
                     <ProfileImg>
                       <Avatar
-                        name={userInfo?.avatar?.name || userInfo?.email}
-                        variant={userInfo?.avatar?.variant || 'beam'}
+                        name={c?.avatar?.name || c?.nickname}
+                        variant={c?.avatar?.variant || 'beam'}
                         colors={
-                          userInfo?.avatar?.colors || [
+                          c?.avatar?.colors || [
                             '#E6626F',
                             '#EFAE78',
                             '#F5E19C',
