@@ -41,7 +41,7 @@ export function DeleteAccountModal({ onClick }: DeleteAccountModalProps) {
   );
 }
 
-const DialogContentStyled = styled(DialogContent)`
+export const DialogContentStyled = styled(DialogContent)`
   > button {
     &:focus {
       box-shadow: none;
@@ -49,11 +49,11 @@ const DialogContentStyled = styled(DialogContent)`
   }
 `;
 
-const DialogTitleStyled = styled(DialogTitle)`
+export const DialogTitleStyled = styled(DialogTitle)`
   font-size: 16px;
 `;
 
-const DialogDescriptionStyled = styled(DialogDescription)`
+export const DialogDescriptionStyled = styled(DialogDescription)`
   font-size: 15px;
 `;
 

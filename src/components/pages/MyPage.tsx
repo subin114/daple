@@ -13,6 +13,8 @@ import { DeleteAccountModal } from '../layout/DeleteAccountModal';
 import { deleteAccount } from '@/firebase/firestore/deleteAccount';
 import { useNavigate } from 'react-router-dom';
 import Avatar from 'boring-avatars';
+import DefaultProfileModal from '../layout/DefaultProfileModal';
+import ModeToDesiredProfileModal from '../layout/ModeToDesiredProfileModal';
 
 const MyPage = () => {
   const { userInfo, isAuthenticated, updateUserNickname, logout } = useCurAuthStore();
@@ -104,8 +106,8 @@ const MyPage = () => {
                 />
               </Profile>
               <BtnWrap>
-                <Btn>기본 프로필로 변경</Btn>
-                <Btn>원하는 프로필로 변경</Btn>
+                <DefaultProfileModal />
+                <ModeToDesiredProfileModal />
               </BtnWrap>
             </ProfileSection>
             <Form>
@@ -223,18 +225,6 @@ const BtnWrap = styled.span`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-`;
-
-const Btn = styled(Button)`
-  font-size: 12px;
-  background-color: #56bec0;
-  color: #fff;
-  width: 150px;
-  height: 25px;
-
-  &:hover {
-    background-color: #42abad;
-  }
 `;
 
 const Form = styled.form`
