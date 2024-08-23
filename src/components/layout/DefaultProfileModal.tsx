@@ -10,18 +10,47 @@ import {
 import Avatar from 'boring-avatars';
 import { useCurAuthStore } from '@/store/useCurAuthStore';
 import { DialogContentStyled, DialogTitleStyled } from './DeleteAccountModal';
+import { useEffect, useState } from 'react';
+import { updateUserAvatar } from '@/firebase/firestore/updateUserInfo';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseConfig';
 
 const DefaultProfileModal = () => {
   const { userInfo } = useCurAuthStore();
+  const [selectedAvatar, setSelectedAvatar] = useState<number | null>(null);
+  const [currentAvatar, setCurrentAvatar] = useState<string | null>(null);
 
-  const avatars = Array.from({ length: 36 }, (_, idx) => (
-    <Avatar
-      key={idx}
-      name={`${userInfo?.nickname}-${idx}`}
-      variant="beam"
-      colors={['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']}
-    />
-  ));
+  const handleAvatarClick = (idx: number) => {
+    setSelectedAvatar(idx);
+  };
+
+  const handleChangeClick = async () => {
+    if (selectedAvatar !== null && userInfo?.uid) {
+      const avatarData = {
+        name: `${userInfo.email}-${selectedAvatar}`,
+        colors: ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91'],
+        variant: 'beam',
+        idx: selectedAvatar,
+      };
+
+      await updateUserAvatar(userInfo.uid, avatarData);
+    }
+  };
+
+  useEffect(() => {
+    if (!userInfo?.uid) return;
+
+    const docRef = doc(db, 'users', userInfo.uid);
+
+    const unsubscribe = onSnapshot(docRef, docSnap => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        setCurrentAvatar(data.avatar);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [userInfo?.avatar]);
 
   return (
     <Dialog>
@@ -30,11 +59,26 @@ const DefaultProfileModal = () => {
         <DialogHeader>
           <DialogTitleStyled>기본 프로필</DialogTitleStyled>
           <AvatarsContainer>
-            <GridAvatars>{avatars}</GridAvatars>
+            <GridAvatars>
+              {Array.from({ length: 36 }, (_, idx) => (
+                <AvatarWrapper
+                  key={idx}
+                  onClick={() => handleAvatarClick(idx)}
+                  isSelected={selectedAvatar === idx}
+                >
+                  <Avatar
+                    key={idx}
+                    name={`${userInfo?.email}-${idx}`}
+                    variant="beam"
+                    colors={['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']}
+                  />
+                </AvatarWrapper>
+              ))}
+            </GridAvatars>
           </AvatarsContainer>
         </DialogHeader>
         <DialogFooter>
-          <ChangeBtn>변경하기</ChangeBtn>
+          <ChangeBtn onClick={handleChangeClick}>변경하기</ChangeBtn>
         </DialogFooter>
       </DialogContentStyled>
     </Dialog>
@@ -69,16 +113,26 @@ const GridAvatars = styled.span`
   grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
   gap: 10px;
   padding: 10px;
+`;
+
+const AvatarWrapper = styled.span<{ isSelected: boolean }>`
+  border-radius: 20px;
+  padding: 2px;
 
   svg {
-    border: 2px solid #fff;
     border-radius: 20px;
     cursor: pointer;
+    border: 2px solid #fff;
 
     &:hover {
-      border: 2px solid #56bec0;
-      background-color: #56bec0;
+      box-shadow: #56bec0 0px 0px 0px 3px;
     }
+
+    ${({ isSelected }) =>
+      isSelected &&
+      `
+      box-shadow: #56BEC0 0px 0px 0px 3px;
+    `}
   }
 `;
 
