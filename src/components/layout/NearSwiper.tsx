@@ -33,12 +33,12 @@ const categories: CategoriesData[] = [
     description: '나도 모르게 빠져드는 맛집',
   },
   { value: 'shopping', label: '쇼핑', types: PLACE_TYPES.SHOP, description: '즐거운 쇼핑 공간' },
-  {
-    value: 'attractions',
-    label: '관광명소',
-    types: PLACE_TYPES.ATTRACTIONS,
-    description: '놓치면 안될 관광명소',
-  },
+  // {
+  //   value: 'attractions',
+  //   label: '관광명소',
+  //   types: PLACE_TYPES.ATTRACTIONS,
+  //   description: '놓치면 안될 관광명소',
+  // },
 ];
 
 const NearSwiper = () => {
@@ -100,7 +100,7 @@ const NearSwiper = () => {
     <StyledSwiper
       modules={[Navigation, Pagination]}
       spaceBetween={30}
-      slidesPerView={4}
+      slidesPerView={3}
       navigation
       breakpoints={{
         320: {
@@ -116,16 +116,16 @@ const NearSwiper = () => {
           spaceBetween: 30,
         },
         1024: {
-          slidesPerView: 4,
+          slidesPerView: 3,
           spaceBetween: 30,
         },
       }}
     >
       {loading
-        ? Array.from({ length: 4 }).map((_, idx) => (
+        ? Array.from({ length: 3 }).map((_, idx) => (
             <StyledSwiperSlide key={idx}>
               <div className="flex flex-col space-y-3" key={idx}>
-                <Skeleton className="h-[350px] w-[277px] rounded-xl" />
+                <Skeleton className="h-[350px] w-[380px] rounded-xl" />
               </div>
             </StyledSwiperSlide>
           ))
@@ -155,7 +155,7 @@ const StyledSwiper = styled(SwiperComponent)`
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 30px;
+    border-radius: 20px;
     cursor: pointer;
     overflow: hidden;
   }
