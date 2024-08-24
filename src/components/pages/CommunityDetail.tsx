@@ -127,7 +127,7 @@ const CommunityDetail = () => {
                   <CommentUserInfo>
                     <ProfileImg>
                       <Avatar
-                        name={c?.avatar?.name || c?.nickname}
+                        name={c?.avatar?.name}
                         variant={c?.avatar?.variant || 'beam'}
                         colors={
                           c?.avatar?.colors || [

@@ -115,9 +115,10 @@ const Login = () => {
         }
 
         const avatar: AvatarInfo = {
-          name: user.displayName || '',
+          name: user.email || '',
           variant: 'beam',
           colors: ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91'],
+          idx: 0,
         };
 
         setUser(user);

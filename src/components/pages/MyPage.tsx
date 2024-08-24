@@ -92,7 +92,7 @@ const MyPage = () => {
             <ProfileSection>
               <Profile>
                 <Avatar
-                  name={userInfo?.avatar?.name || userInfo?.email}
+                  name={userInfo?.avatar?.name}
                   variant={userInfo?.avatar?.variant || 'beam'}
                   colors={
                     userInfo?.avatar?.colors || [

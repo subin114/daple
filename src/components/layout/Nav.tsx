@@ -117,7 +117,7 @@ const Nav = () => {
         {isAuthenticated && userInfo ? (
           <UserInfo>
             <Avatar
-              name={userInfo?.avatar?.name || userInfo?.email}
+              name={userInfo?.avatar.name}
               variant={userInfo?.avatar?.variant || 'beam'}
               colors={
                 userInfo?.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']
