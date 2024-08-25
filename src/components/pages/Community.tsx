@@ -159,7 +159,8 @@ export const ProfileImg = styled.div`
   border: 2px solid #fff;
   overflow: hidden;
 
-  svg {
+  svg,
+  img {
     width: 100%;
     height: 100%;
   }

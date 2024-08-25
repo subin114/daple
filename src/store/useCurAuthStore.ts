@@ -7,6 +7,7 @@ export interface AvatarInfo {
   variant: 'marble' | 'beam' | 'pixel' | 'sunset' | 'ring' | 'bauhaus';
   colors: string[];
   idx: number;
+  profileImage: string;
 }
 
 export interface UserInfo {

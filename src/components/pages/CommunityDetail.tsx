@@ -23,6 +23,7 @@ interface CommentData {
     name: string;
     variant: 'marble' | 'beam' | 'pixel' | 'sunset' | 'ring' | 'bauhaus';
     colors: string[];
+    profileImage: string;
   };
   likes: number;
   commentsCount: number;
@@ -126,19 +127,23 @@ const CommunityDetail = () => {
                 <CommentWrap key={c.id}>
                   <CommentUserInfo>
                     <ProfileImg>
-                      <Avatar
-                        name={c?.avatar?.name}
-                        variant={c?.avatar?.variant || 'beam'}
-                        colors={
-                          c?.avatar?.colors || [
-                            '#E6626F',
-                            '#EFAE78',
-                            '#F5E19C',
-                            '#A2CA8E',
-                            '#66AF91',
-                          ]
-                        }
-                      />
+                      {c?.avatar?.profileImage ? (
+                        <img src={c.avatar.profileImage} alt="Profile" />
+                      ) : (
+                        <Avatar
+                          name={c?.avatar?.name}
+                          variant={c?.avatar?.variant || 'beam'}
+                          colors={
+                            c?.avatar?.colors || [
+                              '#E6626F',
+                              '#EFAE78',
+                              '#F5E19C',
+                              '#A2CA8E',
+                              '#66AF91',
+                            ]
+                          }
+                        />
+                      )}
                     </ProfileImg>
                     <Nickname>
                       {c.nickname} <span>{dayjs(c.createdAt).format('YYYY/MM/DD · HH:mm')}</span>
@@ -156,19 +161,23 @@ const CommunityDetail = () => {
           <EditorContainer>
             <CommentMyInfo>
               <ProfileImg>
-                <Avatar
-                  name={userInfo?.avatar?.name || userInfo?.email}
-                  variant={userInfo?.avatar?.variant || 'beam'}
-                  colors={
-                    userInfo?.avatar?.colors || [
-                      '#E6626F',
-                      '#EFAE78',
-                      '#F5E19C',
-                      '#A2CA8E',
-                      '#66AF91',
-                    ]
-                  }
-                />
+                {userInfo?.avatar?.profileImage ? (
+                  <img src={userInfo.avatar.profileImage} alt="Profile" />
+                ) : (
+                  <Avatar
+                    name={userInfo?.avatar?.name}
+                    variant={userInfo?.avatar?.variant || 'beam'}
+                    colors={
+                      userInfo?.avatar?.colors || [
+                        '#E6626F',
+                        '#EFAE78',
+                        '#F5E19C',
+                        '#A2CA8E',
+                        '#66AF91',
+                      ]
+                    }
+                  />
+                )}
               </ProfileImg>
               <Nickname>{userInfo?.nickname}</Nickname>
             </CommentMyInfo>

@@ -4,7 +4,13 @@ import { db } from '../firebaseConfig';
 /** 프로필 이미지 변경 */
 export const updateUserAvatar = async (
   uid: string,
-  avatarData: { name: string; colors: string[]; variant: string; idx: number },
+  avatarData: {
+    name: string;
+    colors: string[];
+    variant: string;
+    idx: number;
+    profileImage: string;
+  },
 ) => {
   try {
     const userRef = doc(db, 'users', uid);

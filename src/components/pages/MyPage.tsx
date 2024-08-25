@@ -91,19 +91,23 @@ const MyPage = () => {
           <Section>
             <ProfileSection>
               <Profile>
-                <Avatar
-                  name={userInfo?.avatar?.name}
-                  variant={userInfo?.avatar?.variant || 'beam'}
-                  colors={
-                    userInfo?.avatar?.colors || [
-                      '#E6626F',
-                      '#EFAE78',
-                      '#F5E19C',
-                      '#A2CA8E',
-                      '#66AF91',
-                    ]
-                  }
-                />
+                {userInfo?.avatar?.profileImage ? (
+                  <img src={userInfo.avatar.profileImage} alt="Profile" />
+                ) : (
+                  <Avatar
+                    name={userInfo?.avatar?.name}
+                    variant={userInfo?.avatar?.variant || 'beam'}
+                    colors={
+                      userInfo?.avatar?.colors || [
+                        '#E6626F',
+                        '#EFAE78',
+                        '#F5E19C',
+                        '#A2CA8E',
+                        '#66AF91',
+                      ]
+                    }
+                  />
+                )}
               </Profile>
               <BtnWrap>
                 <DefaultProfileModal />
@@ -212,8 +216,10 @@ const Profile = styled.div`
   border-radius: 50px;
   background: #eee;
   border: 2px solid #fff;
+  overflow: hidden;
 
-  svg {
+  svg,
+  img {
     width: 100%;
     height: 100%;
   }

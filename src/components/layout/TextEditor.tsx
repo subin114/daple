@@ -51,13 +51,17 @@ const TextEditor = ({ onUpload, nickname }: TextEditorProps) => {
     <>
       <UserInfo>
         <ProfileImg>
-          <Avatar
-            name={userInfo?.avatar?.name || userInfo?.email}
-            variant={userInfo?.avatar?.variant || 'beam'}
-            colors={
-              userInfo?.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']
-            }
-          />
+          {userInfo?.avatar?.profileImage ? (
+            <img src={userInfo.avatar.profileImage} alt="Profile" />
+          ) : (
+            <Avatar
+              name={userInfo?.avatar?.name}
+              variant={userInfo?.avatar?.variant || 'beam'}
+              colors={
+                userInfo?.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']
+              }
+            />
+          )}
         </ProfileImg>
         <Nickname>{nickname}</Nickname>
       </UserInfo>

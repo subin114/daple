@@ -36,6 +36,7 @@ const DefaultProfileModal = () => {
         colors: ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91'],
         variant: 'beam',
         idx: selectedAvatar,
+        profileImage: '',
       };
 
       try {
@@ -66,7 +67,7 @@ const DefaultProfileModal = () => {
     });
 
     return () => unsubscribe();
-  }, [userInfo?.uid, selectedAvatar]);
+  }, [userInfo?.uid]);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

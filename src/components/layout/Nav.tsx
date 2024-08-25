@@ -116,13 +116,23 @@ const Nav = () => {
         )}
         {isAuthenticated && userInfo ? (
           <UserInfo>
-            <Avatar
-              name={userInfo?.avatar.name}
-              variant={userInfo?.avatar?.variant || 'beam'}
-              colors={
-                userInfo?.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']
-              }
-            />
+            {userInfo?.avatar?.profileImage ? (
+              <img src={userInfo.avatar.profileImage} alt="Profile" />
+            ) : (
+              <Avatar
+                name={userInfo?.avatar?.name}
+                variant={userInfo?.avatar?.variant || 'beam'}
+                colors={
+                  userInfo?.avatar?.colors || [
+                    '#E6626F',
+                    '#EFAE78',
+                    '#F5E19C',
+                    '#A2CA8E',
+                    '#66AF91',
+                  ]
+                }
+              />
+            )}
             <UserName>{userInfo?.nickname}</UserName>
           </UserInfo>
         ) : null}
@@ -216,6 +226,7 @@ const UserInfo = styled.div`
     display: inline-block;
     margin-right: 7px;
     border-radius: 20px;
+    border: 1px solid #ddd;
   }
 `;
 

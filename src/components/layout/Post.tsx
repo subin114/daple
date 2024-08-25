@@ -94,11 +94,22 @@ const Post = ({ post, isDetail }: PostProps) => {
         style={{ cursor: isDetail ? 'default' : 'pointer' }}
       >
         <ProfileImg>
-          <Avatar
+          {post?.avatar?.profileImage ? (
+            <img src={post.avatar.profileImage} alt="Profile" />
+          ) : (
+            <Avatar
+              name={post?.avatar?.name}
+              variant={post?.avatar?.variant || 'beam'}
+              colors={
+                post?.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']
+              }
+            />
+          )}
+          {/* <Avatar
             name={post.avatar?.name}
             variant={post.avatar?.variant || 'beam'}
             colors={post.avatar?.colors || ['#E6626F', '#EFAE78', '#F5E19C', '#A2CA8E', '#66AF91']}
-          />
+          /> */}
         </ProfileImg>
         <Nickname>{post.nickname}</Nickname>
       </BoardUserInfo>
