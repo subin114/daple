@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import Avatar from 'boring-avatars';
 import DefaultProfileModal from '../layout/DefaultProfileModal';
 import ModeToDesiredProfileModal from '../layout/ModeToDesiredProfileModal';
+import PasswordChangeModal from '../layout/PasswordChangeModal';
 
 const MyPage = () => {
   const { userInfo, isAuthenticated, updateUserNickname, logout } = useCurAuthStore();
@@ -137,7 +138,7 @@ const MyPage = () => {
               <InputWrap>
                 <LabelWrap>
                   <Label htmlFor="password">Password</Label>
-                  <Button>변경</Button>
+                  <PasswordChangeModal />
                 </LabelWrap>
                 <Input
                   type="password"

@@ -44,8 +44,6 @@ const ModeToDesiredProfileModal = () => {
         profileImage: base64 as string,
       };
 
-      console.log('sssssssssssss', avatarData, file);
-
       try {
         await updateUserAvatar(userInfo.uid, avatarData);
         setUserInfo({ ...userInfo, avatar: avatarData });

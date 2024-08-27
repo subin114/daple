@@ -122,7 +122,7 @@ const Btn = styled(DialogTrigger)`
   }
 `;
 
-const AvatarsContainer = styled(DialogDescription)`
+export const AvatarsContainer = styled(DialogDescription)`
   width: auto;
   height: auto;
   display: flex;
@@ -160,7 +160,7 @@ const AvatarWrapper = styled.span<{ isSelected: boolean }>`
   }
 `;
 
-const ChangeBtn = styled(Button)`
+export const ChangeBtn = styled(Button)`
   background-color: #56bec0;
   font-size: 14px;
 
